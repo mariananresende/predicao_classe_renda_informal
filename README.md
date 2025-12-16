@@ -1,5 +1,5 @@
 # Uso de Modelo de Machine Learning para apoiar a identificação da renda informal das famílias do Cadastro Único 
-Repositório para desenvolvimento de modelo de Machine Learning para predição de classe de renda das famílias do cadastro único considerando a renda informal.
+Repositório para desenvolvimento de modelo de Machine Learning para predição de classe de renda das famílias do cadastro único considerando a renda formal para apioar o processo de qualificação da renda informal.
 
 ## Introdução
 O Cadastro Único é a principal ferramenta para caracterizar socioeconomicamente as famílias de baixa renda residentes no Brasil. A partir do Cadastro Único é possível selecionar beneficiários de programa sociais com o objetivo de diminuir a vulnerabilidade socioeconômica dessas famílias. Para tanto é preciso que os dados sejam qualificados, de maneira a melhorar a focalização dos programas e permitir que as famílias com perfil para cada programa sejam alcançadas.
@@ -69,7 +69,6 @@ Assim, de modo a utilizar no desenvolvimento do Modelo de Machine Learning as va
 | Variável | significado | Motivo para a seleção |
 | ---- | ----- | --------- |
 | CO_FAMILIAR_FAM	| Código Familiar | chave - identificador da família para associar às características das pessoas que compõem cada família  |
-| DT_CADASTRO_FAM	| Data do cadastramento da Família, formato YYYY-MM-DD | avaliar se o tempo de cadastramento da família interfere na capacidade de predição da renda.|	
 | CO_EST_CADASTRAL_FAM | Estado cadastral da família |	utilizada para selecionar apenas as famílias com estado cadastral 1, 2 ou 3, pois 1 - Em cadastramento, 2 - Sem Registro Civil, 3 - Cadastrado e 4 - Excluído |	
 | VL_RENDA_MEDIA_FAM	| Valor da renda média (per capita) da família, formato NNNNNNNNN (não tem a vírgula) | O valor da renda da família será utilizado para treinar o modelo para predição da classe de renda - variável alvo |
 | IN_TRABALHO_INFANTIL_PESSOA	| Trabalho infantil na família | Para o desenvolvimento do Modelo de Machine Learning será preciso avaliar se possuir membro da família em situação de trabalho infantil interfere na predição de renda |
