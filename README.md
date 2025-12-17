@@ -1,18 +1,25 @@
-# Uso de Modelo de Machine Learning para apoiar a identificação da renda informal das famílias do Cadastro Único 
-Repositório para desenvolvimento de modelo de Machine Learning para predição de classe de renda das famílias do cadastro único considerando a renda formal para apioar o processo de qualificação da renda informal.
+# Uso de Modelo de Machine Learning para apoiar a qualificação da renda informal no Cadastro Único
+
+Este repositório reúne o desenvolvimento de um modelo de aprendizado de máquina aplicado a dados do Cadastro Único para Programas Sociais do Governo Federal, utilizando famílias com renda domiciliar per capita formalmente observada em registros administrativos do Cadastro Nacional de Informações Sociais (CNIS).
+
+O objetivo do projeto é estimar, para famílias sem renda formal captada pelo CNIS, a probabilidade de existência de inconsistências entre a renda declarada no cadastro e a renda provável inferida a partir de informações socioeconômicas, da composição familiar e das características do domicílio. O modelo busca apoiar a priorização de ações de qualificação cadastral, oferecendo um critério objetivo e transparente para identificação de casos com maior risco de divergência de renda e potencial repercussão em políticas sociais com critério de renda.
+
+---
 
 ## Introdução
-O Cadastro Único é a principal ferramenta para caracterizar socioeconomicamente as famílias de baixa renda residentes no Brasil. A partir do Cadastro Único é possível selecionar beneficiários de programa sociais com o objetivo de diminuir a vulnerabilidade socioeconômica dessas famílias. Para tanto é preciso que os dados sejam qualificados, de maneira a melhorar a focalização dos programas e permitir que as famílias com perfil para cada programa sejam alcançadas.
 
-A gestão do Cadastro Único é descentralizada, com os municípios sendo responsáveis pela identificação das famílias e inserção das informações no sistema. Ao governo federal compete fornecer os formulários utilizados na entrevista das famílias, capacitar os operadores e entrevistadores dos estados, para que estes, por sua vez, capacitem os operadores e entrevistados municipais, definir as diretrizes e boas práticas para o preenchimento correto das informações e lançar mão de diferentes estratégias para qualificar os dados. 
+O Cadastro Único constitui o principal instrumento do Estado brasileiro para a caracterização socioeconômica das famílias de baixa renda residentes no país. A partir de suas informações, é possível selecionar beneficiários de diversos programas sociais, com o objetivo de reduzir a vulnerabilidade socioeconômica e promover a inclusão social. Para que esses objetivos sejam alcançados de forma eficaz, é fundamental que os dados cadastrais sejam qualificados, garantindo melhor focalização das políticas públicas e maior aderência entre o perfil das famílias e os critérios de cada programa.
 
-A falta de qualificação dos dados pode fazer com que famílias acessem programas sociais sem preencher os requisitos estabelecidos, dificultando a identificação e o acesso das famílias que são socioeconomicamente mais vulneráveis, tendo em vista limitações operacionais e orçamentárias. 
+A gestão do Cadastro Único é descentralizada, cabendo aos municípios a identificação das famílias e o registro das informações no sistema. Ao governo federal compete, dentre outras, definir os formulários de coleta, promover a capacitação de operadores e entrevistadores, estabelecer diretrizes e boas práticas para o correto preenchimento das informações e adotar estratégias voltadas à qualificação contínua da base de dados.
 
-A renda é uma das principais informações utilizadas para a seleção das famílias. Atualmente os dados de renda formais são captados por meio da interoperabilidade com o Cadastro Nacional de Informações Sociais (CNIS). Entretanto, as rendas informais são captadas apenas por meio da autodeclaração do Responsável Familiar. 
+A baixa qualidade das informações cadastrais pode resultar em distorções no acesso às políticas sociais, permitindo que famílias que não atendem plenamente aos critérios de elegibilidade acessem determinados benefícios, ao mesmo tempo em que dificulta a identificação e o atendimento de famílias em situação de maior vulnerabilidade, especialmente diante de limitações operacionais e orçamentárias.
 
-De modo a apoiar a qualificação da informação relacionada à renda, o objetivo do projeto a ser desenvolvido no âmbito do MBA de ciência de dados e inteligência artificial aplicadas é apoiar o processo de qualificação da renda das famílias, por meio de um modelo de Machine Learning, para prever a classificação da faixa de renda das famílias com renda informal. 
+A renda domiciliar per capita é uma das principais variáveis utilizadas na seleção de famílias para políticas públicas. Atualmente, informações sobre rendimentos formais são obtidas por meio da interoperabilidade com o Cadastro Nacional de Informações Sociais (CNIS). No entanto, as rendas de natureza informal — predominantes entre parte significativa do público do Cadastro Único — são captadas exclusivamente por meio da autodeclaração do Responsável Familiar, o que impõe desafios adicionais ao processo de qualificação cadastral.
 
-A classificação da faixa de renda das famílias será feita a partir do desenvolvimento de um modelo treinado com os dados da renda formal, e depois utilizado para classificar as famílias com renda informal, de modo a ter um parâmetro para guiar uma maior qualificação dos dados de renda. Com isso, espera-se aumentar a focalização dos programas usuários, e reduzir a vulnerabilidade socioeconomica das famílias que mais precisam. 
+Nesse contexto, o presente projeto, desenvolvido no âmbito do MBA em Ciência de Dados e Inteligência Artificial Aplicadas, propõe o uso de técnicas de aprendizado de máquina para apoiar a qualificação da informação de renda no Cadastro Único. A partir de padrões aprendidos em famílias com renda formal observada no CNIS, o modelo estima a probabilidade de inconsistência entre a renda declarada e a renda provável de famílias sem registro formal, utilizando exclusivamente características socioeconômicas declaradas, informações sobre a composição familiar e condições do domicílio.
+
+O modelo desenvolvido consiste em um classificador binário treinado com dados de famílias com renda formal identificada no CNIS, capaz de aprender padrões associados a situações em que a renda domiciliar per capita observada supera o limite de ½ salário mínimo. Ressalta-se que o modelo não tem por finalidade automatizar decisões de elegibilidade ou exclusão de famílias de políticas públicas, mas sim oferecer um instrumento de apoio à gestão, orientando a priorização de ações de qualificação cadastral e contribuindo para uma maior focalização das políticas públicas sociais com critérios de renda e que utilizam o Cadastro Único para seleção de beneficiários.
+ 
 
 ## Variáveis do Cadastro Único utilizadas no modelo de Machine Learning
 Para a seleção das variáveis do Cadastro Único a serem utilizadas no desenvolvimento do Modelo de Machine Learning para a predição da classe de renda das famílias com renda informal, foi feito um levantamento bibliográfico para identificar, na literatura especializada, as variáveis que mais contribuíram para o desenvolvimento de modelos de predição de renda, conforme lista abaixo:
@@ -63,94 +70,145 @@ Para a seleção das variáveis do Cadastro Único a serem utilizadas no desenvo
 | Razões e índices compostos	| razão de dependentes, índice de ativos domésticos, escolaridade média ponderada |	Em Ohlenburg (2022) e Dang et al. (2024), variáveis agregadas mostraram melhor estabilidade temporal e reduziram overfitting.|
 | Interações automáticas (ML) |	combinações de educação × ocupação, sexo × estado civil	| Detectadas automaticamente por XGBoost/LASSO em Silva & França (2021) e Linhares et al. (2025), indicando sinergia entre dimensões sociais. |
 
-Assim, de modo a utilizar no desenvolvimento do Modelo de Machine Learning as variáveis levantadas na revisão bibliográfica, foram utilizadas as seguintes variáveis do Cadastro Único:
+Assim, de modo a utilizar no desenvolvimento do Modelo de Machine Learning as variáveis levantadas na revisão bibliográfica, foram utilizadas as seguintes variáveis do Cadastro Único, como características explicativas do modelo, com exceção da renda domiciliar per capita, que é utilizada apenas para a construção do alvo durante o treinamento. Nenhuma informação diretamente relacionada à elegibilidade a benefícios sociais é utilizada como entrada do modelo, de modo a evitar vazamento de informação:
 
 **Variáveis de famílias**
-| Variável | significado | Motivo para a seleção |
-| ---- | ----- | --------- |
-| CO_FAMILIAR_FAM	| Código Familiar | chave - identificador da família para associar às características das pessoas que compõem cada família  |
-| CO_EST_CADASTRAL_FAM | Estado cadastral da família |	utilizada para selecionar apenas as famílias com estado cadastral 1, 2 ou 3, pois 1 - Em cadastramento, 2 - Sem Registro Civil, 3 - Cadastrado e 4 - Excluído |	
-| VL_RENDA_MEDIA_FAM	| Valor da renda média (per capita) da família, formato NNNNNNNNN (não tem a vírgula) | O valor da renda da família será utilizado para treinar o modelo para predição da classe de renda - variável alvo |
-| IN_TRABALHO_INFANTIL_PESSOA	| Trabalho infantil na família | Para o desenvolvimento do Modelo de Machine Learning será preciso avaliar se possuir membro da família em situação de trabalho infantil interfere na predição de renda |
-| CO_MUNIC_IBGE_2_FAM |	Primeira parte do código IBGE: numérico de dois algarismos descrevendo sua UF | avaliar se a variável de localidade interfere de capacidade de predição da renda.	|
-| CO_MUNIC_IBGE_5_FAM |	Segunda parte do código IBGE | avaliar se a variável de localidade interfere de capacidade de predição da renda.	|
-|CO_LOCAL_DOMIC_FAM	| Características do local onde está situado o domicílio | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| CO_ESPECIE_DOMIC_FAM	| Espécie do domicílio| avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| QT_COMODOS_DOMIC_FAM |	Qtd de comodos do domicilioa | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| QT_COMODOS_DORMITORIO_FAM |Qtd de comodo servindo como dormitório do domicilio |	avaliar se as características dos domicílios das famílias interferem na capacidade de predição da renda.	|
-|CO_MATERIAL_PISO_FAM	| Material predominante no piso do domicílio | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| CO_MATERIAL_DOMIC_FAM	| Material predominante nas paredes externas do domicílio | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| CO_AGUA_CANALIZADA_FAM |	Se o domicílio tem água encanada | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.|
-| CO_ABASTE_AGUA_DOMIC_FAM |	Forma de abastecimento de água | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-| CO_BANHEIRO_DOMIC_FAM	|Existência de banheiro | avaliar se as caracerísticas dos domicílios das famílias interferem na capacidade de predição da renda.	|
-|CO_ESCOA_SANITARIO_DOMIC_FAM | Forma de escoamento sanitário | avaliar se as caracerísticas dos domicílios e infraestutura de serviços da localidade das famílias interferem na capacidade de predição da renda. |
-| CO_ILUMINACAO_DOMIC_FAM  | Tipo de iluminação | avaliar se as caracerísticas dos domicílios interferem na capacidade de predição da renda. |
-| IN_FAMILIA_INDIGENA_FAM	| Família indígena | avaliar se a marcação de pertencimento a um Grupo Populacional, Tradicional e Específico (GPTEs) interfere na predição de renda	|
-| IN_FAMILIA_QUILOMBOLA_FAM |	Família quilombola | avaliar se a marcação de pertencimento a um Grupo Populacional, Tradicional e Específico (GPTEs) interfere na predição de renda  |
-| QT_PESSOAS_DOMIC_FAM	| Quantidade de pessoas no domicílio | avaliar se a densidade do domicílio interfere na predição de renda |
-| QT_FAMILIAS_DOMIC_FAM	| Quantidade de famílias no domicílio | avaliar se a densidade do domicílio interfere na predição de renda |
-| IN_PARC_MDS_FAM	| Grupos tradicionais e específicos | avaliar se a marcação de pertencimento a um Grupo Populacional, Tradicional e Específico (GPTEs) interfere na predição de renda	 |
+| Variável                     | Significado                                                    | Papel no modelo                |
+| ---------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| CO_FAMILIAR_FAM              | Código identificador da família                                | Chave técnica utilizada exclusivamente para agregação das informações das pessoas ao nível familiar. Não é utilizada como variável explicativa no modelo |
+| CO_EST_CADASTRAL_FAM         | Estado cadastral da família                                    | Utilizada como critério de filtragem para inclusão apenas de famílias ativas ou em processo de cadastramento (exclui registros encerrados ou excluídos)  |
+| VL_RENDA_MEDIA_FAM           | Renda domiciliar per capita da família (sem separador decimal) | Utilizada **exclusivamente** para a construção da variável-alvo durante o treinamento do modelo. Não integra o conjunto de variáveis explicativas        |
+| IN_TRABALHO_INFANTIL_FAM     | Indica presença de trabalho infantil na família                | Proxy de vulnerabilidade socioeconômica, associada a contextos de inserção precoce no mercado de trabalho     |
+| CO_MUNIC_IBGE_2_FAM          | Código da UF (IBGE – 2 dígitos)                                | Captura heterogeneidades territoriais amplas associadas a mercados de trabalho, custo de vida e oportunidades   |
+| CO_MUNIC_IBGE_5_FAM          | Código do município (IBGE – 5 dígitos)                         | Permite capturar efeitos locais e contextuais relacionados à estrutura econômica e aos serviços disponíveis     |
+| IN_FORMULARIO_SUP2_FAM       | Regitro no Formulário Suplementar 2                            | As famílias em situação de rua devem ser marcadas com "1 - sim" para esse campo e o formulário suplementar 2 deve ser preenchido com as características das pessoasque compõem a familia, relacionadas à situação de rua  |
+| CO_LOCAL_DOMIC_FAM           | Tipo de localização do domicílio                               | Indicador das condições territoriais e de acesso a infraestrutura        |
+| CO_ESPECIE_DOMIC_FAM         | Espécie do domicílio                                           | Característica estrutural do domicílio associada a padrões socioeconômicos     |
+| QT_COMODOS_DOMIC_FAM         | Quantidade total de cômodos                                    | Proxy de qualidade e dimensão do domicílio    |
+| QT_COMODOS_DORMITORIO_FAM    | Número de cômodos utilizados como dormitório                   | Indicador de adensamento domiciliar     |
+| CO_MATERIAL_PISO_FAM         | Material predominante do piso                                  | Indicador indireto de condições habitacionais         |
+| CO_MATERIAL_DOMIC_FAM        | Material predominante das paredes externas                     | Indicador indireto de qualidade da moradia     |
+| CO_AGUA_CANALIZADA_FAM       | Existência de água canalizada                                  | Indicador de acesso a infraestrutura básica     |
+| CO_ABASTE_AGUA_DOMIC_FAM     | Forma de abastecimento de água                                 | Indicador de condições sanitárias e infraestrutura local    |
+| CO_BANHEIRO_DOMIC_FAM        | Existência de banheiro no domicílio                            | Indicador de saneamento básico   |
+| CO_ESCOA_SANITARIO_DOMIC_FAM | Forma de escoamento sanitário                                  | Indicador combinado de saneamento e infraestrutura urbana/rural     |
+| CO_ILUMINACAO_DOMIC_FAM      | Tipo de iluminação do domicílio                                | Proxy de acesso a serviços básicos    |
+| IN_FAMILIA_INDIGENA_FAM      | Indica se a família é indígena                                 | Identifica pertencimento a Grupos Populacionais Tradicionais e Específicos (GPTEs), associado a contextos |
+| IN_FAMILIA_QUILOMBOLA_FAM    | Indica se a família é quilombola                               | Identifica pertencimento a GPTEs, associado a contextos territoriais e socioeconômicos específicos    |
+| QT_PESSOAS_DOMIC_FAM         | Número de pessoas no domicílio                                 | Proxy de tamanho familiar e potencial pressão sobre a renda       |
+| QT_FAMILIAS_DOMIC_FAM        | Número de famílias no domicílio                                | Indicador de compartilhamento de moradia e densidade       |
+| IN_PARC_MDS_FAM              | Identificação de GPTEs                                         | Utilizada como marcador de pertencimento a grupos com dinâmicas socioeconômicas específicas     |
+
+
+As variáveis individuais são agregadas ao nível familiar por meio de estatísticas descritivas (percentuais, indicadores de presença e distribuição etária), de forma a preservar a unidade de análise do modelo no nível da família. As variáveis do Cadastro Único relacionadas a pessoas são destacadas na tabela abaixo:
 
 **Variáveis de pessoas**
-| Variável | significado | Motivo para a seleção |
-| ---- | ----- | --------- |
-| CO_FAMILIAR_FAM	| Código Familiar | chave - identificador da família para associar às características das pessoas que compõem cada família. As características das pessoas que compõem a família serão agrupadas e associadas ao identificador da família, o qual será utilizado para identificar se o modelo foi efetivo na predição da renda da família analisada  |
-| CO_CHV_NATURAL_PESSOA	| Número do membro da Família | identificador da pessoa. O modelo é treinado a partir das características de cada pessoa que compõe a família, para posteriormente ser agrupada e associar ao identificador da família, o qual será utilizado para identificar se o modelo foi efetivo na predição da renda da família analisada |
-| CO_EST_CADASTRAL_MEMB	| Estado cadastral da pessoa | Para o desenvolvimento do Modelo de Machine Learning não serão usados os dados de pessoas excluídas |	
-| CO_SEXO_PESSOA	| sexo da pessoa | avaliar se o sexo dos membros da família, especialmente do responsável familiar, interfere na predição de renda	|
-| DT_NASC_PESSOA	| usada para calcular a idade da pessoa | avaliar se a idade dos membros da família interfere na predição de renda, tanto do responsável familiar, quanto das pessoas. Para agrupar as pessoas em um linha por família, será calculado o percentual de pessoas que compõem a família por faixa etária |
-| CO_PARENTESCO_RF_PESSOA | Relaçao de parentesco com o RF | avaliar se as características de raça/cor, gênero, idade, ter deficiência física, escolaridade, trabalho do responsável familiar interfere na predição de renda |
-| CO_RACA_COR_PESSOA	| cor ou raça | avaliar se as características de raça/cor dos membros da família, especialmente do responsável familiar,  interferem na predição de renda.	|
-| CO_DEFICIENCIA_MEMB	| Pessoa tem deficiência | avaliar se a presença de pessoas com deficiência na família interfere na predição de renda |
-| CO_SABE_LER_ESCREVER_MEMB	| Pessoa sabe ler e escrever | avaliar se as informações relacionadas a escolaridade interferem na predição de renda	|
-| IN_FREQUENTA_ESCOLA_MEMB	| Pessoa frequenta escola | avaliar se as informações relacionadas a escolaridade interferem na predição de renda	|
-| CO_CURSO_FREQUENTA_MEMB | Curso que a pessoa frequenta |	avaliar se as informações relacionadas a escolaridade interferem na predição de renda	|
-| CO_CURSO_FREQ_PESSOA_MEMB	| Curso mais elevado que a pessoa frequentou | avaliar se as informações relacionadas a escolaridade interferem na predição de renda	|
-| CO_TRABALHOU_SEMANA_MEMB	| Pessoa trabalhou na semana passada | avaliar se as informações relacionadas a trabalho interferem na predição de renda |
-| CO_AFASTADO_TRAB_MEMB	| Pessoa afastada na semana passada | avaliar se as informações relacionadas a trabalho interferem na predição de renda |
-| CO_AGRICULTURA_TRAB_MEMB	| É atividade extrativista | avaliar se as informações relacionadas a trabalho interferem na predição de renda	|
-| CO_PRINCIPAL_TRAB_MEMB |	Função principal | avaliar se as informações relacionadas a trabalho interferem na predição de renda |
-| CO_TRABALHO_12_MESES_MEMB	| Pessoa com trabalho remunerado 12 meses | avaliar se as informações relacionadas a trabalho interferem na predição de renda	 |
+| Variável                  | Significado                                     | Papel no modelo                                                                             |
+| ------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| CO_FAMILIAR_FAM           | Código identificador da família                 | Chave técnica para agregação das informações individuais ao nível familiar                  |
+| CO_CHV_NATURAL_PESSOA     | Identificador da pessoa no núcleo familiar      | Utilizado apenas para organização e agregação dos dados                                     |
+| CO_EST_CADASTRAL_MEMB     | Estado cadastral da pessoa                      | Utilizado para excluir pessoas com cadastro encerrado ou excluído                           |
+| CO_SEXO_PESSOA            | Sexo da pessoa                                  | Avalia a composição de gênero da família, com foco no responsável familiar                  |
+| DT_NASC_PESSOA            | Data de nascimento                              | Utilizada para cálculo da idade e posterior agrupamento em faixas etárias                   |
+| CO_PARENTESCO_RF_PESSOA   | Parentesco com o Responsável Familiar           | Permite identificar características específicas do responsável familiar                     |
+| CO_RACA_COR_PESSOA        | Raça/cor                                        | Utilizada para avaliar a composição racial da família, com foco no responsável familiar |
+| CO_DEFICIENCIA_MEMB       | Indica se a pessoa possui deficiência           | Proxy de necessidades de cuidado e de possíveis restrições à inserção laboral               |
+| CO_SABE_LER_ESCREVER_MEMB | Indica se a pessoa sabe ler e escrever          | Indicador básico de escolaridade                                                            |
+| IN_FREQUENTA_ESCOLA_MEMB  | Indica se a pessoa frequenta escola             | Indicador de escolarização em curso                                                         |
+| CO_CURSO_FREQUENTA_MEMB   | Curso que a pessoa frequenta                    | Indicador do nível educacional atual                                                        |
+| CO_CURSO_FREQ_PESSOA_MEMB | Curso mais elevado já frequentado               | Indicador de capital educacional acumulado                                                  |
+| CO_TRABALHOU_SEMANA_MEMB  | Indica se trabalhou na semana de referência     | Proxy de inserção no mercado de trabalho                                                    |
+| CO_AFASTADO_TRAB_MEMB     | Pessoa afastada na semana passada por motivo de doença, falta voluntária, licença, férias ou outro motivo  | Indicador para captar afastamento do trabalho      |
+| CO_AGRICULTURA_TRAB_MEMB  | Indica se o trabalho principal foi na agricultura, criação de animais, pesca ou coleta (extração vegetal) | Indicador para captar se o trabalho está relacionado a atividades do meio rural |
+| CO_PRINCIPAL_TRAB_MEMB | Indica a função principal do trabalho do membro da família | Indicador que marca a função do trabalho principal, que pode ser: 1 - Trabalhador por conta própria (bico, autônomo); 2 - Trabalhador temporário em área rural; 3 - Empregado sem carteira de trabalho assinada; 4 - Empregado com carteira de trabalho assinada; 5 - Trabalhador doméstico sem carteira de trabalho assinada; 6 - Trabalhador doméstico com carteira de trabalho assinada; 7 - Trabalhador não-remunerado; 8 - Militar ou servidor público; 9 - Empregador; 10 - Estagiário e 11 - Aprendiz |
+| CO_TRABALHO_12_MESES_MEMB | Indica trabalho remunerado nos últimos 12 meses | Proxy de vínculo laboral e estabilidade econômica          |
 
-## Limpeza dos valores Nan
-Tanto na **Base famílias**, quanto na **Base pessoas** existe um número considerável de valores vazios considerando as regras de preenchimento do formulário do Cadastro Único. Assim, foi necessário olhar para as regras de preenchimento do formulário do Cadastro Único, com base no Manual do Entrevistador do Cadastro Único, de modo a identificar os valores vazios pelo fato de não serem de preenchimento obrigatório.
 
-Desta forma, os campos NaN foram povoados com os seguintes valores, de acordo com cada regra especificada abaixo:
+## Construção da base de dados e critérios de seleção
+
+A base de dados utilizada neste projeto foi construída a partir de registros do Cadastro Único, da referência de 11/2025, que já se encontravam previamente povoados com informações de renda formal provenientes do Cadastro Nacional de Informações Sociais (CNIS), conforme os procedimentos estabelecidos na Instrução Normativa nº 1/SAGICAD/MDS, de 02 de junho de 2023. Não foi realizada, no âmbito deste trabalho, integração direta entre bases administrativas externas.
+
+Foram selecionadas exclusivamente famílias cujos registros indicavam que a renda havia sido obtida a partir do CNIS, conforme identificado nos campos de origem da renda do Cadastro Único (CO_ORGM_VLR_RNDMO_MES_PASSADO = 2 e CO_ORGM_VLR_RNDMO_BRUTO_PRDO = 2). Esse critério garante que a renda utilizada como referência no treinamento do modelo corresponda a informações administrativas formalmente observadas, independentemente do valor da renda declarada no cadastro.
+
+No nível individual, foram consideradas apenas pessoas pertencentes a essas famílias e que apresentavam registros válidos no Cadastro Único e com CPF regular.
+As características socioeconômicas individuais — relacionadas à escolaridade, idade, condição de trabalho e outras dimensões observáveis — foram posteriormente agregadas ao nível familiar, compondo o conjunto de variáveis explicativas utilizado pelo modelo.
+
+O recorte adotado permite que o modelo aprenda padrões socioeconômicos associados à presença de renda formal observada no CNIS, sendo posteriormente aplicado para estimar a probabilidade de inconsistência entre a renda declarada e a renda provável de famílias sem renda formal captada, com o objetivo de apoiar a priorização de ações de qualificação cadastral.
+
+## Preparação da base
+
+Tanto na **Base famílias**, quanto na **Base pessoas** existe um número considerável de valores vazios considerando as regras de preenchimento do formulário do Cadastro Único. Assim, foi necessário olhar para as regras de preenchimento do formulário, com base no Manual do Entrevistador do Cadastro Único, de modo a identificar os valores vazios pelo fato de não serem de preenchimento obrigatório.
+
+No processo de limpeza, os campos vazios foram povoados com os seguintes valores, de acordo com cada regra especificada abaixo:
 
 ### Base famílias
+#### Campos de domicílio relacionados a famílias em situação de rua
+O "Bloco 2 - Características do domicílio" não deve ser preenchido para famílias em situação de rua. Assim, os campos "CO_LOCAL_DOMIC_FAM", "CO_ESPECIE_DOMIC_FAM", "QT_COMODOS_DOMIC_FAM", "QT_COMODOS_DORMITORIO_FAM",  "CO_MATERIAL_PISO_FAM", "CO_MATERIAL_DOMIC_FAM", "CO_AGUA_CANALIZADA_FAM", "CO_ABASTE_AGUA_DOMIC_FAM", "CO_BANHEIRO_DOMIC_FAM", "CO_ESCOA_SANITARIO_DOMIC_FAM", "CO_ILUMINACAO_DOMIC_FAM", e os campos "QT_PESSOAS_DOMIC_FAM" e "QT_FAMILIAS_DOMIC_FAM", que também possuem a orientação de não serem preenchidos para famílias em situação de rua, tiveram os valores NaN preenchidos com **-1**, significando "Não se aplica", quando o campo "IN_FORMULARIO_SUP2_FAM" está marcado como "1 - Sim".
 #### Campos relacionados às características do domicílio:
-Os campos 'qtd_comodos_domic_fam', 'qtd_comodos_dormitorio_fam', 'cod_material_piso_fam', 'cod_material_domic_fam', 'cod_agua_canalizada_fam', 'cod_abaste_agua_domic_fam', 'cod_banheiro_domic_fam', 'cod_escoa_sanitario_domic_fam', só são de preenchimento obrigatório no caso da resposta ter sido "1- Particular permamente" no campo 'cod_especie_domic_fam'. Sendo assim, quando o campo 'cod_especie_domic_fam' é diferente de 1, os valores dos campos relacionados às características do domicílio foi preenchido com **-1**.
+Os campos "QT_COMODOS_DOMIC_FAM", "QT_COMODOS_DORMITORIO_FAM",  "CO_MATERIAL_PISO_FAM", "CO_MATERIAL_DOMIC_FAM", "CO_AGUA_CANALIZADA_FAM", "CO_ABASTE_AGUA_DOMIC_FAM", "CO_BANHEIRO_DOMIC_FAM",  "CO_ESCOA_SANITARIO_DOMIC_FAM" e "CO_ILUMINACAO_DOMIC_FAM" só devem ser preenchidos no caso da resposta ter sido "1 - Particular permamente" no campo "CO_ESPECIE_DOMIC_FAM". Sendo assim, quando o campo "CO_ESPECIE_DOMIC_FAM" é diferente de 1, os valores dos campos relacionados às características do domicílio foi preenchido com **-1**.
 #### Campo relacionado ao escoamento sanitário:
-O campo 'cod_escoa_sanitario_domic_fam' só é de preenchimento obrigatório quando o campo 'cod_banheiro_domic_fam' é preenchido com "1 - Sim". Desta forma, quando o campo 'cod_banheiro_domic_fam' é igual a 2 (ou seja, não possui banheiro), o valor do campo 'cod_escoa_sanitario_domic_fam' foi preenchido com **-1**.
+O campo  "CO_ESCOA_SANITARIO_DOMIC_FAM" só deve ser preenchido quando o campo "CO_BANHEIRO_DOMIC_FAM" é preenchido com "1 - Sim". Desta forma, quando o campo "CO_BANHEIRO_DOMIC_FAM" é igual a 2 (ou seja, não possui banheiro), o valor do campo "CO_ESCOA_SANITARIO_DOMIC_FAM" foi preenchido com **-1**.
 #### Campo relacionado à família quilombola:
-O campo 'ind_familia_quilombola_fam' só deve ser preenchido caso o campo 'cod_familia_indigena_fam' for "2 - Não". Assim, quando o campo 'cod_familia_indigena_fam' é igual a 1 (ou seja, a família for indígena), o valor do campo 'ind_familia_quilombola_fam' foi marcado como **2**, ou seja, a família não é quilombola.
-#### Campos relacionados ao local do domicílio e à espécie do domicílio:
-Foi identificado que os valores vazios dos campos 'cod_especie_domic_fam' e 'cod_local_domic_fam' coincidem, ou seja, quando um valor é vazio na campo 'cod_especie_domic_fam' também é vazio no campo 'cod_local_domic_fam'. Na base de dados amostral de 2018 disponível no portal de dados abertos, não tem a marcação se a família vive em situação de rua. No Manual do entrevistador há a orientação de que, caso a família esteja em situação de rua, o bloco 2 - características do domicílio não deve ser preenchido, pois existe um cadastramento diferenciado. Desta forma, este caso de valores ausentes pode estar relacionado à situação de rua. De modo a tentar captar se essa condição interfere no modelo, os valores dos dois campos foram preenchidos com **9**, representando nenhuma das outras repostas.
-#### Campos relacionadas à Grupos tradicionais e específicos
-O campo 'ind_parc_mds_fam' está relacionado à marcação de grupos tradicionais e específicos para além de indígena, quilombola, situação de rua ou resgatados do trabalho análogo ao de escravo. Foi avaliado se os valores ausentes estavam relacionados à marcação de indígena ou quilombola, ou ao valor 9 para 'cod_especie_domic_fam' e 'cod_local_domic_fam' criado na tentativa de captar as famílias em situação de rua. Não foi identificado o motivo dos valores vazios. Assim, de modo a tentar captar se a ausência de marcação deste campo pode representar alguma situação que impacte no modelo, os valores vazios foram preenchidos com **9**, representando nenhuma das outras repostas.
+O campo "IN_FAMILIA_QUILOMBOLA_FAM" só deve ser preenchido caso o campo "IN_FAMILIA_INDIGENA_FAM" for "2 - Não". Assim, quando o campo "IN_FAMILIA_INDIGENA_FAM" é igual a 1 (ou seja, a família for indígena), o valor NaN do campo "IN_FAMILIA_QUILOMBOLA_FAM" foi marcado como **2**, ou seja, a família não é quilombola.
 #### Valores vazios remanescentes
-Após todas as limpezas descritas acima, foram excluídos os valores remanescentes Nan.
+Após todas as limpezas descritas acima, foram excluídos os valores remanescentes Nan, passando a base de famílias de 9.847.475 para 9.776.551 linhas.
 
 ### Base pessoas
-#### Campo frequenta escola
-Os campos 'cod_escola_local_memb', 'cod_curso_frequenta_memb', 'cod_ano_serie_frequenta_memb' só são obrigatório se a pessoa respondeu "1 - Sim, rede pública", "2 - Sim, rede particular" no campo 'ind_frequenta_escola_memb'. Desta forma, quando o campo 'ind_frequenta_escola_memb' foi preenchido com valor diferente de 1 ou 2, os campos vazios relacionados foram preenchidos com **-1**.
-#### Campo ano e série que a pessoa frequenta
-O campo 'cod_ano_serie_frequenta_memb' só é obrigatório ser preenchido quando no campo 'cod_curso_frequenta_memb' (curso que a pessoa frequenta) a pessoa respondeu uma das opções: 4 - Ensino Fundamental regular (duração 8 anos), 5 - Ensino Fundamental regular (duração 9 anos), 6 - Ensino Fundamental especial, 7 - Ensino Médio regular ou 8 - Ensino Médio especial. Assim, quando o campo 'cod_curso_frequenta_memb' foi preenchido com valor difente de 4, 5, 6, 7 ou 8 os valores vazios de 'cod_ano_serie_frequenta_memb' foram preenchidos com **-1**.
-#### Campo curso mais elevado que frequentou
-O campo 'cod_curso_frequentou_pessoa_memb' só é obrigatório quando o campo 'ind_frequenta_escola_memb' (Pessoa frequenta escola?) for respondido com "3 - Não, já frequentou". Assim, quando o campo 'ind_frequenta_escola_memb' estava diferente de 3, os valores vazios do campo 'cod_curso_frequentou_pessoa_memb' foram preenchidos com **-1**.
-#### Campos relacionados ao curso frequentado
-Os campos 'cod_ano_serie_frequentou_memb' e 'cod_concluiu_frequentou_memb' só devem ser preenchidos caso a pessoa frequentou algum dos cursos 4 - Ensino Fundamental 1ª a 4ª séries, Elementar (Primário), Primeira fase do 1º grau, 5 - Ensino Fundamental 5ª a 8ª séries, Médio 1º ciclo (Ginasial), Segunda fase do 1º grau, 6 - Ensino Fundamental (duração 9 anos), 7 - Ensino Fundamental Especial, 8 - Ensino Médio, 2º grau, Médio 2º ciclo (Científico, Clássico, Técnico, Normal) ou 9 - Ensino Médio Especial no campo 'cod_curso_frequentou_pessoa_memb'. Desta forma, quando a resposta do campo 'cod_curso_frequentou_pessoa_memb' foi diferente de 4, 5, 6, 7, 8 e 9 os valores vazios dos campos 'cod_ano_serie_frequentou_memb' e 'cod_concluiu_frequentou_memb' foi preenchido com **-1**.
+
+**Limpeza dos valores vazios**
+
+Para alguns critérios de limpeza dos valores NaN da base de pessoas foi utilizada a informação da idade da pessoa. Assim, foi criada uma coluna "IDADE_REFERENCIA", calculada a partir da subtração da data 31/11/2025 (último dia da referência da base do Cadastro Único utilizada) pela coluna "DT_NASC_PESSOA", dividido por 365.25 (dias).
+
 #### Campos relacionados ao trabalho
-Os campos 'cod_trabalhou_memb', 'cod_afastado_trab_memb', 'cod_agricultura_trab_memb', 'cod_principal_trab_memb', 'cod_trabalho_12_meses_memb', 'qtd_meses_12_meses_memb' só devem ser preenchidos para pessoas com 14 anos ou mais. Assim, para o caso de pessoas com idade menor que 14 anos, no campo 'idade', os valores dos campos relacionados ao trabalho foram preenchidos com **-1**.
+Os campos 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB' só devem ser preenchidos para pessoas com 10 anos ou mais. Essa mudança aconteceu a partir de amrço/2022. Entretanto, observa-se uma quantidade muito alta de valores NaN desses campos para pessoas menores de 14 anos, conforme regra anterior.  Assim, para o caso de pessoas com idade menor que 14 anos, no campo "IDADE_REFERENCIA", os valores dos campos relacionados ao trabalho foram preenchidos com **-1**.
 #### Campo relacionado ao afastamento do trabalho
-O campo 'cod_afastado_trab_memb' só deve ser respondido se o campo 'cod_trabalhou_memb' (Pessoa trabalhou na semana passada?) for respondido como "2 - Não". Assim, para os casos de resposta diferente de 2, os valores vazios do campo 'cod_afastado_trab_memb' foram preenchidos com **-1**.
+O campo 'CO_AFASTADO_TRAB_MEMB' só deve ser respondido se o campo 'CO_TRABALHOU_SEMANA_MEMB' (Pessoa trabalhou na semana passada?) for respondido como "2 - Não". Assim, para os casos de resposta diferente de 2, os valores vazios do campo 'CO_AFASTADO_TRAB_MEMB' foram preenchidos com **-1**.
 #### Campo relacionado à atividade extrativista e ao trabalho principal
-O campo 'cod_agricultura_trab_memb' (É atividade extrativista? 1 - Sim e 2 - Não) e o campo 'cod_principal_trab_memb' só são obrigatórios se a pessoa respondeu 1 - Sim no campo 'cod_trabalhou_memb' (Pessoa trabalhou na semana passada?) ou no campo 'cod_afastado_trab_memb' (Pessoa afastada na semana passada?). Assim, para o caso em que os 'cod_trabalhou_memb' e 'cod_afastado_trab_memb' tiveram resposta diferente de 1, os valores vazios de 'cod_agricultura_trab_memb' e de 'cod_principal_trab_memb' foram substituídos por **-1**. 
-Além disso, observou-se ainda alguns valores vazios remanescentes para o campo 'cod_agricultura_trab_memb'. Desta forma, foi avaliado o preenchimento do campo 'cod_principal_trab_memb'. Quando este estava marcado com "2 - Trabalhador temporário em área rural", o valor vazio do campo 'cod_agricultura_trab_memb' foi alterado para "**1** - Sim" e para os demais casos para **9** - Desconhecido.  
-#### Campo relacionado à quantidade de meses trabalhados
-O campo 'qtd_meses_12_meses_memb' (Quantidade de meses trabalhados nos últimos 12 meses) só é obrigatório se a pessoa tiver respondido "1 - Sim" no campo 'cod_trabalho_12_meses_memb' (Pessoa com trabalho remunerado em algum período nos último 12 meses). Desta forma, os valores vazios do campo 'qtd_meses_12_meses_memb' foi alterado para **-1** quando o campo 'cod_trabalho_12_meses_memb' for diferente de 1.
+O campo 'CO_AGRICULTURA_TRAB_MEMB' (É atividade extrativista? 1 - Sim e 2 - Não) e o campo 'CO_AGRICULTURA_TRAB_MEMB' só são obrigatórios se a pessoa respondeu 1 - Sim no campo 'CO_TRABALHOU_SEMANA_MEMB'(Pessoa trabalhou na semana passada?) ou no campo 'CO_AFASTADO_TRAB_MEMB' (Pessoa afastada na semana passada?). Assim, para o caso em que os 'CO_TRABALHOU_SEMANA_MEMB' e 'CO_AFASTADO_TRAB_MEMB' tiveram resposta "2 - Não" os valores vazios de 'CO_AGRICULTURA_TRAB_MEMB' e de 'CO_AGRICULTURA_TRAB_MEMB' foram substituídos por **-1**. 
+#### Campo frequenta escola
+Os campos  'CO_CURSO_FREQUENTA_MEMB' só deve ser preenchido se a pessoa respondeu "1 - Sim, rede pública", "2 - Sim, rede particular" no campo 'IN_FREQUENTA_ESCOLA_MEMB'. Desta forma, quando o campo 'IN_FREQUENTA_ESCOLA_MEMB' foi preenchido com valor diferente de 1 ou 2, os campos vazios de 'CO_CURSO_FREQUENTA_MEMB' foram preenchidos com **-1**.
+#### Campo curso que a pessoa < 6 anos frequenta
+Foi identificado que um percentual muito grande de pessoas menores de 6 anos estão com valores NaN para os campos 'CO_CURSO_FREQUENTA_MEMB' e 'CO_CURSO_FREQ_PESSOA_MEMB'. Assim, de modo a não excluir todas essas pessoas da base, quando a pessoa era menor de 6 anos de idade e respondeu "4 - Nunca frequentou" creche ou escola no campo 'IN_FREQUENTA_ESCOLA_MEMB', o campo 'CO_CURSO_FREQUENTA_MEMB' e 'CO_CURSO_FREQ_PESSOA_MEMB' foi marcado como **-1**, significando que não é nenhuma das respostas possíveis. 
+#### Campo curso mais elevado que frequentou
+O campo 'CO_CURSO_FREQ_PESSOA_MEMB' só deve ser respondido quando o campo 'IN_FREQUENTA_ESCOLA_MEMB' (Pessoa frequenta escola?) for respondido com "3 - Não, já frequentou". Assim, quando o campo 'IN_FREQUENTA_ESCOLA_MEMB' foi diferente de 3, os valores vazios do campo 'CO_CURSO_FREQ_PESSOA_MEMB' foram preenchidos com **-1**.
 #### Valores vazios remanescentes
-Foram feitas diversas análises adicionais para identificar possíveis ajustes nos valores vazios finais. Entretanto, não foi identificada outra situação de valor vazio que parece estar relacionado à regra de preenchimento do Cadastro Único. Desta forma, as linhas com valores vazios remanescentes foram excluídas,
+Foram feitas diversas análises adicionais para identificar possíveis ajustes nos valores vazios finais. Entretanto, não foi identificada outra situação de valor vazio que parece estar relacionado à regra de preenchimento do Cadastro Único. Desta forma, as linhas com valores vazios remanescentes foram excluídos.
+
+**Condensando os campos de pessoas em famílias**
+
+De modo a garantir que cada família ocupe apenas uma linha do Dataframe final utilizado para o desenvolvimento do ML, as características das pessoas foram agrupadas, da forma especificada abaixo:
+#### PCT_1_INFANCIA - Percentual de crianças na primeira infância
+Foi calculado o percentual de pessoas em uma mesma família que estão na primeira infância, ou seja, que possuem 6 anos ou menos de idade, de modo a tentar identificar se a necessidade de cuidado está relacionada à renda.
+#### PCT_CRIANCAS_7A11 - Percental de crianças
+Foi calculado o percentual de pessoas em uma mesma família que são crianças, ou seja, estão entre 7 e 11 anos de idade.
+#### PCT_ADOLESCENTES_12A18 - Percentual de adolescentes
+Foi calculado o percentual de pessoas em uma mesma família que são adolescentes, ou seja, estão entre 12 e 18 anos de idade.
+#### PCT_JOVENS_19A29 - Percentual de jovens
+Foi calculado o percentual de pessoas em uma mesma família que são jovens, ou seja, estão entre 19 e 29 anos.
+#### PCT_ADULTOS_30A59 - Percentual de adultos
+Foi calculado o percentual de pessoas em uma mesma família que são adultos, ou seja, estão entre 30 e 59 anos.
+#### PCT_IDOSOS_60A64 - Percentual de idosos
+Foi calculado o percentual de pessoas em uma mesma família que são idosos e não estão na faixa etária de concessão do Benefício de Prestação Continuada (BPC).
+#### PCT_IDOSOS_BPC - Percentual de idosos com 65 anos ou mais
+Foi calculado o percentual de pessoas em uma mesma família que estão na faixa etária da concessão do BPC, para avalair se esse perfil contribui para uma alteração na renda.
+#### TEM_CRIANCA_SEM_ESCOLA - Marcação tem criança fora da escola
+Foi criado um marcador para identificar as famílias que possuem (=1) pelo menos uma criança entre 7 e 11 anos fora da escola, ou seja, 'IN_FREQUENTA_ESCOLA_MEMB' = 3.
+#### TEM_ADOLESCENTE_SEM_ESCOLA - Marcação tem adolescente fora da escola
+Foi criado um marcador para identificar as famílias que possuem (=1) pelo menos um adolescente entre 12 e 18 anos fora da escola, ou seja, 'IN_FREQUENTA_ESCOLA_MEMB' = 3.
+#### PCT_PES_NAO_ANALFABETIZADA - Percentual de pessoas não alfabetizadas
+Foi calculado o percentual de pessoas acima de 10 anos que marcaram "2 - não", no campo "CO_SABE_LER_ESCREVER_MEMB".
+#### PCT_ADULTO_NUNCA_FREQ_ESCOLA - Percentual de adultos que nunca frequentaram escola
+Foi calculado o percentual de pessoas acima de 18 anos que marcaram "4 - Nunca frequentou" no campo 'IN_FREQUENTA_ESCOLA_MEMB'.
+#### PCT_7A18_ESCOLA_PUBLICA - Percentual de crianças e adolescentes em escola pública
+Foi calculado o percentual de pessoas entre 7 e 18 anos que marcaram "1 - Sim, escola pública no campo 'IN_FREQUENTA_ESCOLA_MEMB'.
+#### PCT_MENOR6_FORA_CRECHE_PRE - Percentual de crianãs da 1ª infância fora da creche ou pré-escola
+Foi calculado o percentual de pessoas menores de 6 anos que marcaram "3 - Não, mas já frequentou" ou "4 - Nunca frequentou" no campo 'IN_FREQUENTA_ESCOLA_MEMB'.
+#### PCT_PES_DEFICIENCIA - Percentual de pessoas com deficiência na família
+Foi calculado o percentual de pessoas na família com marcação do campo 'CO_DEFICIENCIA_MEMB' igual a "1 - Sim".
+
+**Dados do Responsável Familiar**
+
+A coluna 'CO_PARENTESCO_RF_PESSOA' foi filtrada para apresentar apenas as linhas com resultado "1 - Pessoa responsável pela unidade familiar" de modo a permitir que as características das pessoas que não estavam condensadas remanescentes, fossem relacionadas ao responsável familiar.
 
 
 
