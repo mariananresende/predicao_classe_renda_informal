@@ -3,3 +3,5 @@ base_anonimizada/
 .ipynb_checkpoints/
 df_bal.csv
 df_prop.csv
+df_bal_binario.csv
+df_prop_binario.csv
