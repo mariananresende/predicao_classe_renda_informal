@@ -151,3 +151,9 @@ Além disso, observou-se ainda alguns valores vazios remanescentes para o campo 
 O campo 'qtd_meses_12_meses_memb' (Quantidade de meses trabalhados nos últimos 12 meses) só é obrigatório se a pessoa tiver respondido "1 - Sim" no campo 'cod_trabalho_12_meses_memb' (Pessoa com trabalho remunerado em algum período nos último 12 meses). Desta forma, os valores vazios do campo 'qtd_meses_12_meses_memb' foi alterado para **-1** quando o campo 'cod_trabalho_12_meses_memb' for diferente de 1.
 #### Valores vazios remanescentes
 Foram feitas diversas análises adicionais para identificar possíveis ajustes nos valores vazios finais. Entretanto, não foi identificada outra situação de valor vazio que parece estar relacionado à regra de preenchimento do Cadastro Único. Desta forma, as linhas com valores vazios remanescentes foram excluídas,
+
+
+
+## Resultados
+Após treinamento
+Entre os modelos avaliados, o XGBoost apresentou o melhor desempenho global para o objetivo de triagem proposto, alcançando o maior valor de PR-AUC (0,86) e mantendo elevada precisão sob limiar de decisão mais restritivo. Esse resultado indica maior capacidade de ordenar as famílias por risco de inconsistência cadastral, permitindo a priorização de ações de qualificação com controle da carga operacional. Embora CatBoost e HistGradientBoosting tenham apresentado desempenhos próximos, o XGBoost mostrou ligeira superioridade no equilíbrio entre sensibilidade e precisão, sendo, portanto, selecionado como modelo final do estudo.
