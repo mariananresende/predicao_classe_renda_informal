@@ -210,8 +210,43 @@ Foi calculado o percentual de pessoas na família com marcação do campo 'CO_DE
 
 A coluna 'CO_PARENTESCO_RF_PESSOA' foi filtrada para apresentar apenas as linhas com resultado "1 - Pessoa responsável pela unidade familiar" de modo a permitir que as características das pessoas que não estavam condensadas remanescentes, fossem relacionadas ao responsável familiar.
 
+## Justificativa metodológica: classificação binária e foco operacional
+A opção metodológica por um modelo de classificação binária, distinguindo famílias com renda domiciliar per capita até ½ salário mínimo daquelas acima desse limiar, está alinhada tanto ao desenho das políticas sociais brasileiras quanto às evidências da literatura internacional sobre testes de meios baseados em aprendizado de máquina. Estudos recentes demonstram que abordagens binárias tendem a ser mais estáveis e interpretáveis do que classificações multiclasses ou ordinais quando o objetivo é triagem administrativa e priorização de ações, especialmente em contextos de renda informal (ALTMAN et al., 2025; HARTWIG et al., 2025).
+
+A literatura de focalização da pobreza destaca que métricas agregadas, como acurácia global, podem ser enganosas, uma vez que modelos com bom desempenho médio podem falhar justamente na identificação dos casos mais relevantes para a política pública (ELBERS et al., 2007; RAVALLION, 2016). Por esse motivo, o presente projeto prioriza o bom desempenho na identificação das famílias com maior probabilidade de renda acima de ½ salário mínimo, buscando alta precisão (precision) para esse grupo, de modo a reduzir o número de falsos positivos e evitar sobrecarga operacional das gestões municipais responsáveis pela qualificação cadastral.
+
+Essa escolha é respaldada por trabalhos como A New Era in Poverty Diagnostics, que enfatizam o uso de thresholds mais conservadores para produzir listas menores e mais confiáveis quando o custo de verificação é elevado (ALTMAN et al., 2025), bem como por estudos da OCDE e do IPEA, que ressaltam a importância de alinhar modelos preditivos às capacidades institucionais de implementação, evitando estratégias que ampliem excessivamente o número de casos a serem verificados (OECD, 2018; IPEA, 2019).
+
+Além disso, a exclusão de variáveis diretamente associadas à concessão de benefícios segue a recomendação recorrente da literatura sobre testes de meios e targeting, que alerta para o risco de vazamento de informação e de perda de utilidade prática do modelo quando se utilizam proxies muito próximos das regras institucionais vigentes (ALTMAN et al., 2025; IPEA, 2019). Dessa forma, o modelo é treinado exclusivamente com características socioeconômicas observáveis, reforçando seu papel como instrumento complementar de apoio à gestão, e não como mecanismo automático de decisão.
+
+## Variáveis utilizadas no ML
+
+**Variável alvo**: y_bin - nova coluna criada a partir do valor da renda média familiar (renda per capita) sendo 1 > 706 e 0 diferente desse valor.
+
+**Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB',        'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
+
+### Análise de correlação das variáveis
+Foi feita uma análise de correção das variáveis quantitativas a partir 
+
+<img width="1099" height="696" alt="image" src="https://github.com/user-attachments/assets/66f74efe-7321-4270-a6e3-3d426f5218ac" />
 
 
 ## Resultados
 Após treinamento
 Entre os modelos avaliados, o XGBoost apresentou o melhor desempenho global para o objetivo de triagem proposto, alcançando o maior valor de PR-AUC (0,86) e mantendo elevada precisão sob limiar de decisão mais restritivo. Esse resultado indica maior capacidade de ordenar as famílias por risco de inconsistência cadastral, permitindo a priorização de ações de qualificação com controle da carga operacional. Embora CatBoost e HistGradientBoosting tenham apresentado desempenhos próximos, o XGBoost mostrou ligeira superioridade no equilíbrio entre sensibilidade e precisão, sendo, portanto, selecionado como modelo final do estudo.
+
+## Referências bibliográficas 
+
+ALTMAN, M.; ARDINGTON, C.; WEGNER, E.; ZANZIBAR, N. A new era in poverty diagnostics: experiential knowledge from machine learning to improve the efficiency of social programs in combating poverty. Washington, DC: World Bank, 2025.
+
+ELBERS, C.; LANJOUW, J. O.; LANJOUW, P. Imputing poverty: a review of methods and applications. Journal of Economic Inequality, v. 1, n. 2, p. 161–189, 2003.
+
+ELBERS, C.; FUJII, T.; Lanjouw, P.; ÖZLER, B.; YIN, W. Poverty alleviation through geographic targeting: how much does disaggregation help? Journal of Development Economics, v. 83, n. 1, p. 198–213, 2007.
+
+HARTWIG, F.; SCHRÖDER, C.; SCHULZ, B. Machine learning with administrative data for energy poverty identification in the UK. Energy Policy, v. 185, 2025.
+
+INSTITUTO DE PESQUISA ECONÔMICA APLICADA (IPEA). Limitações de um teste de meios via predição de renda no contexto brasileiro. Brasília: IPEA, 2019.
+
+ORGANISATION FOR ECONOMIC CO-OPERATION AND DEVELOPMENT (OECD). Modernising access to social protection: strategies, technologies and data advances in OECD countries. Paris: OECD Publishing, 2018.
+
+RAVALLION, M. Retooling poverty targeting using a capability approach. World Bank Research Observer, v. 31, n. 2, p. 263–292, 2016.
