@@ -210,7 +210,7 @@ Foi calculado o percentual de pessoas na família com marcação do campo 'CO_DE
 
 A coluna 'CO_PARENTESCO_RF_PESSOA' foi filtrada para apresentar apenas as linhas com resultado "1 - Pessoa responsável pela unidade familiar" de modo a permitir que as características das pessoas que não estavam condensadas remanescentes, fossem relacionadas ao responsável familiar.
 
-## Justificativa metodológica: classificação binária e foco operacional
+## Justificativa metodológica: classificação binária 
 A opção metodológica por um modelo de classificação binária, distinguindo famílias com renda domiciliar per capita até ½ salário mínimo daquelas acima desse limiar, está alinhada tanto ao desenho das políticas sociais brasileiras quanto às evidências da literatura internacional sobre testes de meios baseados em aprendizado de máquina. Estudos recentes demonstram que abordagens binárias tendem a ser mais estáveis e interpretáveis do que classificações multiclasses ou ordinais quando o objetivo é triagem administrativa e priorização de ações, especialmente em contextos de renda informal (ALTMAN et al., 2025; HARTWIG et al., 2025).
 
 A literatura de focalização da pobreza destaca que métricas agregadas, como acurácia global, podem ser enganosas, uma vez que modelos com bom desempenho médio podem falhar justamente na identificação dos casos mais relevantes para a política pública (ELBERS et al., 2007; RAVALLION, 2016). Por esse motivo, o presente projeto prioriza o bom desempenho na identificação das famílias com maior probabilidade de renda acima de ½ salário mínimo, buscando alta precisão (precision) para esse grupo, de modo a reduzir o número de falsos positivos e evitar sobrecarga operacional das gestões municipais responsáveis pela qualificação cadastral.
