@@ -226,9 +226,14 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 **Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB',        'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
 
 ### Análise de correlação das variáveis
-Foi feita uma análise de correção das variáveis quantitativas a partir 
+A correlação de Pearson foi utilizada para avaliar a associação linear entre variáveis quantitativas contínuas e discretas derivadas do Cadastro Único, permitindo identificar relações de dependência linear elevada entre atributos que expressam dimensões semelhantes da composição familiar, escolaridade e densidade habitacional. 
 
-<img width="1099" height="696" alt="image" src="https://github.com/user-attachments/assets/66f74efe-7321-4270-a6e3-3d426f5218ac" />
+A identificação de pares de variáveis com correlação absoluta elevada (|r| ≥ 0,85) foi empregada como diagnóstico de redundância informacional, com o objetivo de reduzir o tamanho do conjunto de atributos, melhorar a estabilidade do modelo e aumentar sua interpretabilidade, especialmente considerando o uso operacional do modelo para apoio à qualificação cadastral. 
+
+A remoção ou consolidação de variáveis altamente correlacionadas contribui para mitigar efeitos de multicolinearidade, reduzir ruído estatístico e fortalecer a explicabilidade dos resultados. 
+
+Abaixo, segue um mapa de calor da matriz de correlação de Pearson entre as variáveis quantitativas utilizadas no modelo, permitindo identificar relações lineares fortes e potenciais redundâncias informacionais entre os atributos analisados. Destaca-se que, como nenhuma variável 
+
 
 
 ## Resultados
