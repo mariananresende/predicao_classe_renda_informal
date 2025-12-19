@@ -222,7 +222,9 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 
 ## Variáveis utilizadas no ML
 
-**Variável alvo**: y_bin - nova coluna criada a partir do valor da renda média familiar (renda per capita) sendo 1 > 706 e 0 diferente desse valor.
+**Variável alvo**: variável binária construída a partir da renda domiciliar per capita formal observada no CNIS, sendo definida como 1 quando o valor é superior a R$ 706 (½ salário mínimo) e 0 caso contrário.
+
+Durante o treinamento, essa variável representa a classe real de renda formalmente observada. Na aplicação do modelo a famílias sem renda formal registrada, o valor previsto de y_bin deve ser interpretado como a probabilidade de a renda efetivamente auferida pela família ser superior à renda declarada no Cadastro Único, e não como uma medida direta de renda.
 
 **Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB', 'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
 
@@ -494,9 +496,29 @@ O modelo desenvolvido apresentou desempenho consistente e aderente ao objetivo p
 
 A estratégia de classificação binária, aliada à definição de um limiar de decisão ajustável, permitiu equilibrar capacidade preditiva e viabilidade operacional, oferecendo um critério objetivo e transparente para apoiar ações de qualificação cadastral. 
 
+Ressalta-se que o modelo não estima renda individual nem substitui procedimentos formais de verificação, tampouco implica julgamento automático sobre veracidade da informação declarada. Seu resultado deve ser interpretado exclusivamente como um score de priorização, que auxilia a gestão pública a direcionar esforços de qualificação cadastral de forma mais focalizada, transparente e proporcional à capacidade operacional.
+
 Como próximo passo, o modelo poderá ser aplicado às famílias sem renda formal captada pelo CNIS, gerando uma lista priorizada de casos com maior risco de divergência de renda, a ser utilizada pelas gestões na condução de processos de verificação e atualização cadastral. 
 
 Os resultados obtidos mostram-se coerentes com a literatura especializada sobre focalização de políticas sociais e uso de aprendizado de máquina para diagnóstico de pobreza, reforçando a adequação metodológica das escolhas realizadas e o potencial do modelo como instrumento de apoio à gestão pública.
+
+## Aplicação do ML
+
+Para simular uma aplicação do ML foi gerada uma base amostral de 1 milhão de famílias sem renda formal, proporcional à população de cada município. 
+
+Após a aplicação do modelo, conforme notebook aplicacao_ML.ipynb, foi gerada o arquivo familias_ml_resumo, com o código anonimizado. 
+
+As colunas do arquivo com o resultado da aplicação do ML são:
+
+| Coluna                  | Descrição                                                                                                                                                                                                | Tipo / Valores                           |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| **ID_FAM_ANON**         | Identificador anonimizado da família (Responsável Familiar). Gerado apenas para fins analíticos, sem permitir reidentificação.                                                                           | Inteiro                                  |
+| **VL_RENDA_MEDIA_FAM**  | Valor da renda média familiar declarada no Cadastro Único no momento do cadastro. Utilizada como variável explicativa no modelo, não como rótulo.                                                        | Numérico (R$)                            |
+| **CO_MUNIC_IBGE_2_FAM** | Código IBGE da Unidade da Federação (UF) de residência da família (2 dígitos).                                                                                                                           | Categórico (UF)                          |
+| **CO_MUNIC_IBGE_5_FAM** | Código IBGE do município de residência da família (5 dígitos). Permite análises territoriais mais detalhadas.                                                                                            | Categórico (Município)                   |
+| **PROB_RENDA_INFORMAL** | Probabilidade estimada pelo modelo de que a renda efetivamente auferida pela família seja superior à renda declarada no Cadastro Único, com base em padrões aprendidos a partir de famílias com renda formal observada no CNIS. Valor contínuo entre 0 e 1. | Numérico (0–1) |
+| **PRED_RENDA_INFORMAL** | Classificação final do modelo, obtida a partir da aplicação de um *threshold* conservador (0,80) sobre a probabilidade estimada. Valor 1 indica família priorizada para qualificação cadastral de renda. | Binário (0 = não indicado, 1 = indicado) |
+
 
 ## Referências bibliográficas 
 
