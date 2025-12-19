@@ -504,20 +504,22 @@ Os resultados obtidos mostram-se coerentes com a literatura especializada sobre 
 
 ## Aplicação do ML
 
-Para simular uma aplicação do ML foi gerada uma base amostral de 1 milhão de famílias sem renda formal, proporcional à população de cada município. 
+Para simular a aplicação do modelo, foi gerada uma base amostral de 1 milhão de famílias sem renda formal observada, proporcional à distribuição de famílias por município, com o objetivo de avaliar o comportamento do modelo em um cenário operacional realista.
 
-Após a aplicação do modelo, conforme notebook aplicacao_ML.ipynb, foi gerada o arquivo familias_ml_resumo, com o código anonimizado. 
+O modelo foi aplicado conforme descrito no notebook aplicacao_ML.ipynb. Como resultado, foi inicialmente gerado um arquivo intermediário com os scores do modelo para todas as famílias da amostra. Em seguida, esses resultados foram combinados com a renda declarada no Cadastro Único, de modo que apenas famílias que declararam renda per capita inferior ou igual a R$ 706, mas cujo perfil socioeconômico foi classificado pelo modelo como compatível com renda superior a esse limiar, fossem priorizadas para averiguação cadastral.
 
-As colunas do arquivo com o resultado da aplicação do ML são:
+O arquivo final gerado, familias_para_averiguacao_cadastral.csv, contém apenas as famílias elegíveis à etapa de qualificação cadastral, identificadas por código anonimizado.
 
-| Coluna                  | Descrição                                                                                                                                                                                                | Tipo / Valores                           |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| **ID_FAM_ANON**         | Identificador anonimizado da família (Responsável Familiar). Gerado apenas para fins analíticos, sem permitir reidentificação.                                                                           | Inteiro                                  |
-| **VL_RENDA_MEDIA_FAM**  | Valor da renda média familiar declarada no Cadastro Único no momento do cadastro. Utilizada como variável explicativa no modelo, não como rótulo.                                                        | Numérico (R$)                            |
-| **CO_MUNIC_IBGE_2_FAM** | Código IBGE da Unidade da Federação (UF) de residência da família (2 dígitos).                                                                                                                           | Categórico (UF)                          |
-| **CO_MUNIC_IBGE_5_FAM** | Código IBGE do município de residência da família (5 dígitos). Permite análises territoriais mais detalhadas.                                                                                            | Categórico (Município)                   |
-| **PROB_RENDA_INFORMAL** | Probabilidade estimada pelo modelo de que a renda efetivamente auferida pela família seja superior à renda declarada no Cadastro Único, com base em padrões aprendidos a partir de famílias com renda formal observada no CNIS. Valor contínuo entre 0 e 1. | Numérico (0–1) |
-| **PRED_RENDA_INFORMAL** | Classificação final do modelo, obtida a partir da aplicação de um *threshold* conservador (0,80) sobre a probabilidade estimada. Valor 1 indica família priorizada para qualificação cadastral de renda. | Binário (0 = não indicado, 1 = indicado) |
+As colunas do arquivo final são:
+
+| Coluna                  | Descrição                                                                                                                                                                                                                                                                                        | Tipo / Valores                           |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| **ID_FAM_ANON**         | Identificador anonimizado da família (Responsável Familiar). Gerado exclusivamente para fins analíticos, sem possibilidade de reidentificação.                                                                                                                                                   | Inteiro                                  |
+| **VL_RENDA_MEDIA_FAM**  | Valor da renda média familiar declarada no Cadastro Único no momento do cadastro. Utilizada em conjunto com o resultado do modelo para definição do público elegível à averiguação cadastral.                                                                                                    | Numérico (R$)                            |
+| **CO_MUNIC_IBGE_2_FAM** | Código IBGE da Unidade da Federação (UF) de residência da família (2 dígitos).                                                                                                                                                                                                                   | Categórico (UF)                          |
+| **CO_MUNIC_IBGE_5_FAM** | Código IBGE do município de residência da família (5 dígitos), permitindo análises territoriais detalhadas.                                                                                                                                                                                      | Categórico (Município)                   |
+| **PROB_RENDA_INFORMAL** | Probabilidade estimada pelo modelo de que o perfil socioeconômico da família seja compatível com níveis de renda superiores aos declarados no Cadastro Único, com base em padrões aprendidos a partir de famílias com renda formal observada no CNIS. Valor contínuo entre 0 e 1.                | Numérico (0–1)                           |
+| **PRED_RENDA_INFORMAL** | Classificação do modelo a partir da aplicação de um *threshold* conservador (0,80) sobre a probabilidade estimada. O valor 1 indica que a família apresenta perfil compatível com renda superior ao limiar normativo, sendo elegível à averiguação cadastral quando combinada à renda declarada. | Binário (0 = não indicado, 1 = indicado) |
 
 
 ## Referências bibliográficas 
