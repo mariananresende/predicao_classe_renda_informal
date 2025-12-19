@@ -21,7 +21,7 @@ Nesse contexto, o presente projeto, desenvolvido no âmbito do MBA em Ciência d
 O modelo desenvolvido consiste em um classificador binário treinado com dados de famílias com renda formal identificada no CNIS, capaz de aprender padrões associados a situações em que a renda domiciliar per capita observada supera o limite de ½ salário mínimo. Ressalta-se que o modelo não tem por finalidade automatizar decisões de elegibilidade ou exclusão de famílias de políticas públicas, mas sim oferecer um instrumento de apoio à gestão, orientando a priorização de ações de qualificação cadastral e contribuindo para uma maior focalização das políticas públicas sociais com critérios de renda e que utilizam o Cadastro Único para seleção de beneficiários.
  
 
-## Variáveis do Cadastro Único utilizadas no modelo de Machine Learning
+## Variáveis utilizadas em modelos de Machine Learning de predição de renda 
 Para a seleção das variáveis do Cadastro Único a serem utilizadas no desenvolvimento do Modelo de Machine Learning para a predição da classe de renda das famílias com renda informal, foi feito um levantamento bibliográfico para identificar, na literatura especializada, as variáveis que mais contribuíram para o desenvolvimento de modelos de predição de renda, conforme lista abaixo:
 
 **1. Variáveis sociodemográficas**
@@ -70,7 +70,8 @@ Para a seleção das variáveis do Cadastro Único a serem utilizadas no desenvo
 | Razões e índices compostos	| razão de dependentes, índice de ativos domésticos, escolaridade média ponderada |	Em Ohlenburg (2022) e Dang et al. (2024), variáveis agregadas mostraram melhor estabilidade temporal e reduziram overfitting.|
 | Interações automáticas (ML) |	combinações de educação × ocupação, sexo × estado civil	| Detectadas automaticamente por XGBoost/LASSO em Silva & França (2021) e Linhares et al. (2025), indicando sinergia entre dimensões sociais. |
 
-Assim, de modo a utilizar no desenvolvimento do Modelo de Machine Learning as variáveis levantadas na revisão bibliográfica, foram utilizadas as seguintes variáveis do Cadastro Único, como características explicativas do modelo, com exceção da renda domiciliar per capita, que é utilizada apenas para a construção do alvo durante o treinamento. Nenhuma informação diretamente relacionada à elegibilidade a benefícios sociais é utilizada como entrada do modelo, de modo a evitar vazamento de informação:
+## Variáveis do Cadastro Único utilizadas para o desenvolvimento do ML
+De modo a utilizar no desenvolvimento do Modelo de Machine Learning as variáveis levantadas na revisão bibliográfica, foram utilizadas as seguintes variáveis do Cadastro Único, como características explicativas do modelo, com exceção da renda domiciliar per capita, que é utilizada apenas para a construção do alvo durante o treinamento. Nenhuma informação diretamente relacionada à elegibilidade a benefícios sociais é utilizada como entrada do modelo, de modo a evitar vazamento de informação:
 
 **Variáveis de famílias**
 | Variável                     | Significado                                                    | Papel no modelo                |
@@ -223,22 +224,279 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 
 **Variável alvo**: y_bin - nova coluna criada a partir do valor da renda média familiar (renda per capita) sendo 1 > 706 e 0 diferente desse valor.
 
-**Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB',        'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
+**Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB', 'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
 
 ### Análise de correlação das variáveis
+
+#### Variáveis quantitativas contínuas e discretas
+
 A correlação de Pearson foi utilizada para avaliar a associação linear entre variáveis quantitativas contínuas e discretas derivadas do Cadastro Único, permitindo identificar relações de dependência linear elevada entre atributos que expressam dimensões semelhantes da composição familiar, escolaridade e densidade habitacional. 
 
 A identificação de pares de variáveis com correlação absoluta elevada (|r| ≥ 0,85) foi empregada como diagnóstico de redundância informacional, com o objetivo de reduzir o tamanho do conjunto de atributos, melhorar a estabilidade do modelo e aumentar sua interpretabilidade, especialmente considerando o uso operacional do modelo para apoio à qualificação cadastral. 
 
 A remoção ou consolidação de variáveis altamente correlacionadas contribui para mitigar efeitos de multicolinearidade, reduzir ruído estatístico e fortalecer a explicabilidade dos resultados. 
 
-Abaixo, segue um mapa de calor da matriz de correlação de Pearson entre as variáveis quantitativas utilizadas no modelo, permitindo identificar relações lineares fortes e potenciais redundâncias informacionais entre os atributos analisados. Destaca-se que, como nenhuma variável 
+Abaixo, segue um mapa de calor da matriz de correlação de Pearson entre as variáveis quantitativas utilizadas no modelo, permitindo identificar relações lineares fortes e potenciais redundâncias informacionais entre os atributos analisados. Destaca-se que como nenhuma variável apresentou limiar de correlação maior que 0.80, nenhuma variável quantitativa foi retirada para o desenvolvimento do modelo.
 
+<img width="1119" height="694" alt="image" src="https://github.com/user-attachments/assets/42f8310d-49e1-4209-9c6b-4a2927093575" />
 
+#### Variáveis categóricas 
 
-## Resultados
-Após treinamento
-Entre os modelos avaliados, o XGBoost apresentou o melhor desempenho global para o objetivo de triagem proposto, alcançando o maior valor de PR-AUC (0,86) e mantendo elevada precisão sob limiar de decisão mais restritivo. Esse resultado indica maior capacidade de ordenar as famílias por risco de inconsistência cadastral, permitindo a priorização de ações de qualificação com controle da carga operacional. Embora CatBoost e HistGradientBoosting tenham apresentado desempenhos próximos, o XGBoost mostrou ligeira superioridade no equilíbrio entre sensibilidade e precisão, sendo, portanto, selecionado como modelo final do estudo.
+Para avaliar a associação e possível redundância informacional entre variáveis categóricas utilizadas no modelo, foi adotada a associação de Cramér (Cramér’s V). Diferentemente do coeficiente de correlação de Pearson, apropriado para variáveis quantitativas contínuas, o Cramér’s V é indicado para mensurar a intensidade da associação entre variáveis nominais ou categóricas, independentemente do número de categorias envolvidas.
+
+A estatística de Cramér é derivada do teste qui-quadrado de independência e assume valores no intervalo [0,1], em que valores próximos de 0 indicam ausência de associação e valores próximos de 1 indicam associação forte entre as variáveis. Essa característica permite identificar pares de variáveis categóricas altamente associadas, que podem representar informação redundante no modelo.
+
+A identificação de colinearidade entre variáveis categóricas é particularmente relevante em modelos de aprendizado de máquina aplicados a dados administrativos, como o Cadastro Único, que apresentam grande número de atributos discretos relacionados a condições do domicílio, escolaridade, ocupação e características individuais. Variáveis fortemente associadas podem aumentar a complexidade do modelo sem ganho informacional, dificultar a interpretação dos resultados e, em alguns algoritmos, contribuir para instabilidade na estimação.
+
+Dessa forma, a utilização do Cramér’s V permitiu orientar decisões de seleção e agrupamento de variáveis categóricas, contribuindo para a construção de um conjunto de atributos mais parcimonioso, interpretável e alinhado aos objetivos do modelo de triagem de inconsistências de renda.
+
+<img width="813" height="794" alt="{1EB71282-ECAF-4339-940A-1607102DFA0E}" src="https://github.com/user-attachments/assets/fc411f18-c65d-4629-b8ff-4d9a25a16148" />
+
+Considerando que as variáveis abaixo apresentaram limiar de associação acima de 0.80, as seguintes variáveis foram excluídas: 'IN_FORMULARIO_SUP2_FAM', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'IN_FAMILIA_INDIGENA_FAM'.
+
+<img width="530" height="130" alt="{4793B5AC-B872-4A28-A08D-56C3E1A3423C}" src="https://github.com/user-attachments/assets/f1cb4bd5-3684-4764-96b3-ac363a666462" />
+
+## Pré-processamento das variáveis
+
+Antes do treinamento dos modelos de aprendizado de máquina, foi realizada uma etapa estruturada de pré-processamento das variáveis, com o objetivo de garantir consistência estatística, reduzir vieses decorrentes de escalas distintas e tornar os dados adequados aos algoritmos utilizados. 
+
+As variáveis foram previamente classificadas conforme sua natureza — quantitativas contínuas, percentuais, categóricas binárias, categóricas multicategóricas, booleanas e geográficas — permitindo a aplicação de transformações específicas a cada grupo. 
+
+Variáveis quantitativas contínuas tiveram valores ausentes imputados pela mediana e foram normalizadas por meio do escalonamento Min–Max, assegurando comparabilidade entre atributos com diferentes ordens de grandeza. 
+
+Variáveis categóricas multicategóricas foram tratadas com imputação pela moda e codificadas via one-hot encoding, preservando informação sem impor ordens artificiais entre categorias, enquanto variáveis categóricas binárias receberam apenas imputação da categoria mais frequente. 
+
+Variáveis percentuais e booleanas, por já se encontrarem em escalas compatíveis, foram mantidas sem transformação adicional. 
+
+Por fim, variáveis geográficas foram preservadas em sua forma original, evitando a criação excessiva de colunas decorrente da codificação one-hot de identificadores territoriais. 
+
+Esse processo de pré-processamento foi encapsulado em um ColumnTransformer, assegurando reprodutibilidade, coerência entre treino e aplicação do modelo e alinhamento metodológico com o uso de dados administrativos complexos, como os do Cadastro Único.
+
+## Treinamento e comparação de modelos de classificação
+
+Para o desenvolvimento do modelo de classificação, foram treinados e comparados diferentes algoritmos de aprendizado de máquina amplamente utilizados em problemas de classificação supervisionada, contemplando abordagens lineares, baseadas em árvores e métodos de ensemble. 
+
+A Regressão Logística foi incluída como modelo de referência por sua interpretabilidade e robustez em cenários lineares. 
+
+Modelos baseados em árvores, como Random Forest, Gradient Boosting e HistGradientBoosting, foram avaliados por sua capacidade de capturar relações não lineares e interações complexas entre variáveis socioeconômicas e domiciliares. 
+
+Adicionalmente, foram testados modelos de gradient boosting de alto desempenho, XGBoost e CatBoost, reconhecidos na literatura por sua eficiência em dados tabulares, tolerância a diferentes tipos de variáveis e bom desempenho em cenários com desbalanceamento de classes. 
+
+A comparação entre esses modelos permitiu avaliar o compromisso entre desempenho preditivo, estabilidade das probabilidades estimadas e adequação ao uso final do modelo como instrumento de triagem operacional, com foco na identificação de famílias com maior risco de inconsistência de renda.
+
+## Comparação dos modelos
+
+Os resultados da comparação entre os modelos indicam desempenho superior dos métodos de gradient boosting, com destaque para o XGBoost, que apresentou os maiores valores de PR-AUC e ROC-AUC, evidenciando melhor capacidade de discriminação entre famílias com e sem risco de inconsistência de renda. 
+
+No cenário de classificação padrão (threshold = 0,50), o XGBoost obteve o maior equilíbrio entre precisão e revocação da classe positiva, refletido no maior F1-score, enquanto CatBoost e HistGradientBoosting apresentaram desempenhos muito próximos. 
+
+Ao aplicar um threshold mais restritivo (0,80), voltado ao uso operacional do modelo como ferramenta de triagem, observou-se aumento substancial da precisão da classe positiva em todos os modelos, com redução esperada da revocação e da taxa de convocação. 
+
+Nesse contexto, o XGBoost manteve o melhor compromisso entre precisão elevada, volume de casos sinalizados e desempenho global, mostrando-se mais adequado ao objetivo do projeto de apoiar ações focalizadas de qualificação cadastral sem sobrecarregar a gestão municipal.
+
+## Análise aprofundada dos modelos com melhor desempenho
+
+Após a avaliação inicial dos modelos, foi realizada uma análise mais aprofundada concentrada nos algoritmos com melhor desempenho global — XGBoost, CatBoost e HistGradientBoosting. 
+
+Essa etapa teve como objetivo examinar com maior detalhe o comportamento dos modelos sob diferentes limiares de decisão, comparando o desempenho no threshold padrão (0,50) e em um threshold mais restritivo (0,80), compatível com o uso operacional do modelo como instrumento de triagem. 
+
+A análise considerou métricas por classe, matriz de confusão e a taxa de convocação gerada, permitindo avaliar explicitamente o trade-off entre precisão, revocação e volume de casos sinalizados. 
+
+Os resultados indicam que, embora os três modelos apresentem desempenho semelhante, o XGBoost mantém o melhor equilíbrio entre precisão elevada e maior capacidade de identificar famílias com potencial inconsistência de renda, enquanto o CatBoost apresenta ligeira vantagem em termos de precisão absoluta, com menor taxa de convocação. 
+
+Essa análise subsidiou a escolha do modelo mais adequado ao objetivo do projeto, priorizando estabilidade, transparência e viabilidade operacional das ações de qualificação cadastral.
+
+## Modelo selecionado - XGBoost
+
+A escolha do XGBoost como modelo final se justifica pelo seu desempenho superior e mais estável no seu cenário de triagem operacional: entre os modelos avaliados, ele apresentou os melhores valores de PR-AUC e ROC-AUC (melhor capacidade de separação global) e manteve o melhor compromisso entre precisão alta e revocação suficiente quando aplicado um limiar mais restritivo (threshold = 0,80), que é exatamente o tipo de decisão necessária para priorizar convocações sem sobrecarregar as gestões municipais. Na prática, isso significa que o XGBoost oferece probabilidades mais úteis para ordenar famílias por risco e, ao mesmo tempo, permite controlar o volume de casos sinalizados via threshold, alinhando o modelo ao objetivo do projeto de identificar potenciais inconsistências entre renda declarada e renda provável inferida.
+
+Os parâmetros adotados foram escolhidos para favorecer generalização e calibragem do score em dados tabulares heterogêneos. O par n_estimators=1200 e learning_rate=0.03 segue uma estratégia comum de boosting: usar muitas árvores com taxa de aprendizado menor, o que tende a produzir fronteiras mais suaves e reduzir instabilidades, especialmente quando há variáveis categóricas codificadas e múltiplos sinais fracos combinados. O max_depth=6 controla a complexidade das árvores, permitindo capturar interações relevantes (por exemplo, composição familiar × escolaridade × condições do domicílio) sem criar árvores excessivamente específicas. Os parâmetros subsample=0.8 e colsample_bytree=0.8 introduzem aleatoriedade no treinamento (linhas e colunas), reduzindo overfitting e tornando o modelo mais robusto a variações entre “famílias com CNIS” (treino) e “famílias sem CNIS” (aplicação). O objective="binary:logistic" é adequado ao problema binário (≤ ½ SM vs > ½ SM), enquanto eval_metric="logloss" favorece probabilidades bem comportadas (úteis para triagem por score). Por fim, tree_method="hist" melhora o desempenho computacional em bases grandes, e random_state/n_jobs garantem reprodutibilidade e eficiência.
+
+A lógica do threshold_pos=0.80 foi incorporada explicitamente na classe XGBoostComThreshold porque o uso final é decisão de triagem, não apenas acurácia. Ao elevar o limiar de decisão, o modelo passa a sinalizar como “classe positiva” apenas os casos com maior probabilidade estimada, o que aumenta a precisão e reduz falsos positivos — crucial quando cada falso positivo implica uma convocação desnecessária e custo operacional no município. Assim, o threshold transforma o classificador em um mecanismo de priorização transparente e ajustável, permitindo calibrar o volume de convocações de acordo com a capacidade de execução e a política de risco adotada.
+
+## Desempenho do modelo selecionado
+
+Com o limiar de decisão ajustado para 0,80, o modelo foi configurado para atuar como instrumento de triagem, priorizando alta precisão na identificação de famílias com maior probabilidade de inconsistência entre a renda declarada e a renda provável. Nesse regime, o modelo apresenta desempenho consistente, com baixo risco de falsos positivos e volume controlado de convocações, alinhado à capacidade operacional das gestões municipais.
+
+| Métrica                     | Valor      |
+| --------------------------- | ---------- |
+| Acurácia                    | **0,6320** |
+| Precisão (classe positiva)  | **0,8920** |
+| Revocação (classe positiva) | **0,4219** |
+| F1-score (classe positiva)  | **0,5729** |
+| Taxa de convocação          | **27,67%** |
+
+A elevada precisão indica que a maior parte das famílias sinalizadas pelo modelo apresenta, de fato, maior risco de inconsistência de renda, enquanto a taxa de convocação moderada assegura que o modelo possa ser utilizado como apoio à priorização de ações de qualificação cadastral, sem gerar sobrecarga excessiva aos municípios.
+
+Ressalta-se, contudo, que o limiar de decisão para convocação é um parâmetro ajustável, podendo ser definido conforme a estratégia e a capacidade operacional da gestão. A adoção de limiares mais baixos tende a ampliar a captação de famílias potencialmente acima do limite de renda, aumentando a sensibilidade do modelo, ainda que ao custo de maior volume de convocações e, consequentemente, maior carga de trabalho para os entes municipais.
+
+### Matriz de confusão
+
+<img width="637" height="459" alt="{70321B46-6F28-41B8-878D-2D3AE463691B}" src="https://github.com/user-attachments/assets/ac3500b7-e603-4f8d-92f5-e616dbcdcf7c" />
+
+A matriz de confusão evidencia o comportamento do modelo no regime de triagem com threshold = 0,80. 
+
+Observa-se que a maior parte das famílias classificadas como “> ½ salário mínimo” corresponde de fato a casos positivos (49.355 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (5.975), refletindo a alta precisão do modelo. 
+
+Por outro lado, há um volume expressivo de falsos negativos (67.617), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado. 
+
+Esse padrão confirma que o modelo foi intencionalmente calibrado para priorizar a confiabilidade dos casos convocados, reduzindo o risco de sobrecarga operacional nos municípios, ainda que isso implique menor sensibilidade na detecção de todos os casos potenciais.
+
+### Curva ROC-AUC
+
+<img width="646" height="490" alt="{92E189D9-6F17-4AD4-8018-A3BA09C2B9BD}" src="https://github.com/user-attachments/assets/c72bddc3-fddd-45ea-94e4-09aad0d4191d" />
+
+A curva ROC evidencia boa capacidade discriminatória do modelo XGBoost, com ROC-AUC de 0,83, indicando que o modelo consegue distinguir de forma consistente famílias com maior e menor risco de inconsistência de renda ao longo de diferentes limiares de decisão. 
+
+A curva posiciona-se bem acima da linha aleatória, o que demonstra que, para uma ampla faixa de taxas de falsos positivos, o modelo mantém taxas relativamente elevadas de verdadeiros positivos, reforçando sua adequação como instrumento de triagem e priorização no processo de qualificação cadastral.
+
+### Trade-off entre precisão, revocação e F1-score por threshold
+
+<img width="710" height="489" alt="{61BC4F19-B926-46D5-B0FB-288E6BEE03DA}" src="https://github.com/user-attachments/assets/ba611be7-28b0-44f3-8529-f6db99cb4801" />
+
+O gráfico evidencia o comportamento clássico de trade-off na classificação binária: à medida que o threshold de decisão aumenta, a precisão cresce de forma consistente, indicando que as famílias convocadas apresentam maior probabilidade real de estarem acima de ½ salário mínimo per capita. 
+
+Em contrapartida, a revocação diminui progressivamente, refletindo a perda de capacidade do modelo em capturar todos os casos positivos. 
+
+O F1-score atinge seus melhores valores em thresholds intermediários, sintetizando esse equilíbrio entre precisão e revocação. 
+
+Esse resultado reforça que a escolha do limiar não é puramente técnica, mas depende do objetivo operacional da política pública.
+
+### Taxa de convocação por threshold
+
+<img width="718" height="394" alt="{53104234-2F03-4203-8223-FC3D6897D44E}" src="https://github.com/user-attachments/assets/7f3a6847-51fc-4c98-b379-7308c1d692ef" />
+
+O segundo mostra que o aumento do threshold reduz significativamente a proporção de famílias convocadas para ações de qualificação cadastral. 
+
+Em thresholds mais baixos, o modelo sinaliza um volume elevado de famílias, o que pode gerar sobrecarga operacional para os municípios. 
+
+Já em thresholds mais altos, a taxa de convocação torna-se mais restrita, concentrando esforços em casos com maior probabilidade de inconsistência de renda. 
+
+Assim, o gráfico ilustra de forma clara como o threshold funciona como um parâmetro de governança, permitindo ajustar o equilíbrio entre capacidade operacional e alcance da identificação de famílias potencialmente acima do limite de renda.
+
+### Curva de calibração
+
+<img width="732" height="482" alt="{53B1E8A0-FB5E-4B98-94F5-650737065B3E}" src="https://github.com/user-attachments/assets/5fdf8387-840f-4d3c-ac2c-1d55dcb14647" />
+
+O gráfico de curva de calibração indica que o modelo apresenta boa calibração das probabilidades previstas, uma vez que a curva observada permanece muito próxima da linha ideal (y = x) ao longo de todo o intervalo. 
+
+As diferenças entre a probabilidade média prevista e a frequência observada são pequenas e próximas de zero na maioria dos bins. 
+
+Por exemplo, no bin com probabilidade média prevista de 0,36, a frequência observada foi 0,365, com diferença praticamente nula (+0,0004), enquanto no bin em torno de 0,61, a diferença foi de apenas +0,0002. 
+
+Mesmo nos extremos, os desvios permanecem baixos, como no primeiro bin (0,068 previsto vs. 0,058 observado; −0,010) e no último (0,955 previsto vs. 0,959 observado; +0,004). 
+
+Esses resultados indicam que as probabilidades geradas pelo modelo são consistentes e confiáveis para apoiar decisões baseadas em limiares, reforçando a adequação do uso de thresholds operacionais para priorização de ações de qualificação cadastral.
+
+## Importância das variáveis
+
+A explicabilidade é um elemento central para o uso responsável de modelos de aprendizado de máquina em políticas públicas, especialmente quando os resultados subsidiam decisões administrativas que podem afetar o acesso das famílias a programas sociais. A análise das variáveis que mais contribuem para a classificação permite compreender quais características socioeconômicas e do domicílio estão associadas às previsões do modelo, aumentando a transparência, a confiança institucional e a possibilidade de validação técnica e substantiva dos resultados. Além disso, a explicabilidade é fundamental para identificar eventuais vieses, apoiar ajustes metodológicos e facilitar o diálogo com gestores e equipes responsáveis pela qualificação cadastral.
+
+<img width="788" height="449" alt="{FE615531-30D6-4944-B158-672FB608C010}" src="https://github.com/user-attachments/assets/9ad284cf-50ab-4378-bf84-c15b9e658d6e" />
+
+A análise de importância das variáveis do modelo XGBoost evidencia que a classificação se apoia principalmente em três dimensões: características do responsável familiar, composição da família e condições do domicílio. As variáveis que não possuem o prefixo PCT e estão relacionadas à escolaridade, inserção no trabalho e idade — como CO_AFASTADO_TRAB_MEMB, CO_PRINCIPAL_TRAB_MEMB, CO_CURSO_FREQ_PESSOA_MEMB, CO_TRABALHO_12_MESES_MEMB e IDADE_REFERENCIA — refletem atributos do responsável familiar, indicando que o modelo captura sinais de estabilidade ocupacional, nível educacional e ciclo de vida associados à renda provável do domicílio.
+
+As variáveis iniciadas por PCT representam a composição da família, sintetizando a distribuição etária e educacional dos membros, com destaque para o percentual de adolescentes em escola pública (PCT_7A18_ESCOLA_PUBLICA), de adultos em idade ativa (PCT_ADULTOS_30A59) e a presença de crianças e adolescentes. Complementarmente, variáveis relacionadas às condições do domicílio, como material do piso e tipo de iluminação, também contribuem para a classificação, funcionando como proxies de bem-estar material. Em conjunto, esses resultados indicam que o modelo aprende padrões socioeconômicos coerentes e interpretáveis, alinhados ao objetivo de apoiar a qualificação cadastral.
+
+### Detalhamento - PCT_7A18_ESCOLA_PUBLICA
+
+<img width="1028" height="384" alt="{D31119D3-C725-4B9B-82D2-BB7F39E2F882}" src="https://github.com/user-attachments/assets/6c2cb711-bd09-4039-9206-929bec6cba5c" />
+
+O gráfico mostra uma relação inversa clara entre o percentual de adolescentes de 7 a 18 anos matriculados em escola pública (PCT_7A18_ESCOLA_PUBLICA) e a probabilidade de a família pertencer à classe com renda per capita acima de ½ salário mínimo. À medida que o percentual de adolescentes em escola pública aumenta, cresce a proporção de famílias classificadas como ≤ ½ SM, enquanto diminui a proporção da classe > ½ SM. Esse padrão é consistente com a literatura e com o contexto do Cadastro Único, indicando que a maior dependência da rede pública de ensino funciona como um proxy de menor renda e maior vulnerabilidade socioeconômica. A distribuição de observações por faixa (barras ao fundo) também mostra que o comportamento é observado em faixas com volume relevante de famílias, reforçando a robustez da associação capturada pelo modelo.
+
+### Detalhamento - CO_AFASTADO_TRAB_MEMB
+
+<img width="802" height="398" alt="{A334E373-1882-40DB-BDD7-13E4768AAA79}" src="https://github.com/user-attachments/assets/89a56ab1-030d-49e2-9970-9897e9885d28" />
+
+O gráfico indica que a variável CO_AFASTADO_TRAB_MEMB, associada ao responsável familiar, apresenta diferença pouco acentuada na distribuição das classes de renda. Tanto entre responsáveis afastados do trabalho (1 – SIM) quanto entre aqueles não afastados (2 – NÃO), as proporções de famílias com renda ≤ ½ salário mínimo e > ½ salário mínimo permanecem muito próximas, em torno de 50%. Isso sugere que, isoladamente, o afastamento do trabalho do responsável familiar não é um fator fortemente discriminante da renda per capita no modelo, mas atua de forma complementar quando combinado com outras características de trabalho, escolaridade, composição familiar e condições do domicílio.
+
+### Detalhamento - PCT_ADULTOS_30A59
+
+<img width="1017" height="384" alt="{00A12878-44A0-4C83-B805-578627A9DE61}" src="https://github.com/user-attachments/assets/d462f723-c209-491f-b862-e137f41121e7" />
+
+O gráfico mostra uma relação clara entre a composição etária da família e a renda per capita. À medida que aumenta o percentual de adultos entre 30 e 59 anos no domicílio, cresce de forma consistente a proporção de famílias classificadas com renda acima de ½ salário mínimo, enquanto diminui a participação das famílias com renda ≤ ½ salário mínimo. Esse padrão é coerente do ponto de vista socioeconômico, pois domicílios com maior concentração de adultos em idade potencialmente ativa tendem a apresentar maior capacidade de inserção no mercado de trabalho e geração de renda, o que explica a forte contribuição dessa variável para a classificação do modelo.
+
+### Detalhamento - PCT_1_INFANCIA
+
+<img width="1015" height="379" alt="{617BCD91-6B65-420C-A54E-4C94B118DFC5}" src="https://github.com/user-attachments/assets/fea3836c-9db7-4ea2-8c43-43cae95d9229" />
+
+O gráfico evidencia uma associação inversa entre a presença de crianças na primeira infância e a renda per capita familiar. À medida que aumenta o percentual de crianças pequenas no domicílio, cresce a proporção de famílias classificadas com renda ≤ ½ salário mínimo, enquanto diminui de forma acentuada a participação das famílias com renda acima de ½ salário mínimo. Esse comportamento é consistente com a literatura socioeconômica, pois domicílios com maior presença de crianças muito pequenas tendem a enfrentar maiores restrições à inserção produtiva dos adultos e maior pressão sobre a renda, o que explica a relevância dessa variável na capacidade do modelo em sinalizar potenciais inconsistências de renda.
+
+### Detalhamento - CO_CURSO_FREQ_PESSOA_MEMB
+
+<img width="1434" height="594" alt="{E2043AB4-7DB9-45D7-BA0B-F4C84BF11733}" src="https://github.com/user-attachments/assets/9093e615-d43c-4ce6-ac7e-c6f0a8e3b744" />
+
+O gráfico mostra uma clara relação entre o nível de escolaridade do responsável familiar e a renda domiciliar per capita. Observa-se que categorias associadas a menor escolarização — como alfabetização, ensino fundamental e EJA — concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, à medida que aumenta o nível educacional do responsável, especialmente nos grupos de ensino médio regular, pré-vestibular e ensino superior/pós-graduação, cresce de forma consistente a participação das famílias com renda acima de ½ salário mínimo. Esse padrão reforça o papel central da escolaridade do responsável familiar como proxy de inserção produtiva e capacidade de geração de renda, explicando sua elevada contribuição para a classificação realizada pelo modelo.
+
+### Detalhamento - CO_PRINCIPAL_TRAB_MEMB
+
+<img width="1427" height="586" alt="{C4BA55F9-2328-47C6-9076-DCD71D9ABC9E}" src="https://github.com/user-attachments/assets/2eea5662-6f15-4238-a2c1-70a0962830df" />
+
+O gráfico evidencia que a condição de trabalho do responsável familiar está fortemente associada ao perfil de renda das famílias. Situações mais precárias ou instáveis de inserção no mercado de trabalho, como conta própria/bico, trabalho temporário em área rural, trabalho doméstico sem carteira e condição de não remunerado, concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, vínculos mais formais e estáveis, como empregado com carteira, militar/servidor público e, sobretudo, empregador, apresentam predominância de famílias com renda acima de ½ salário mínimo. Esse padrão reforça a relevância das informações de ocupação do responsável familiar como um dos principais sinais socioeconômicos utilizados pelo modelo para identificar potenciais inconsistências entre renda declarada e renda provável.
+
+## Análises adicionais considerando as classes de renda pobreza, baixa-renda e acima de 1/2 SM
+
+As famílias do Cadastro Único foram inicialmente classificadas em três classes de renda domiciliar per capita, com base nos valores utilizados pelo MDS:
+(i) classe 0 – pobreza (≤ R$ 218),
+(ii) classe 1 – baixa renda (> R$ 218 e ≤ R$ 706) e
+(iii) classe 2 – acima de ½ salário mínimo (> R$ 706).
+
+Embora o modelo final tenha sido desenvolvido como um classificador binário, distinguindo famílias com renda provável acima de ½ salário mínimo daquelas abaixo desse limiar, a variável classe_renda foi preservada ao longo das análises. Essa decisão permitiu uma avaliação mais aprofundada do comportamento do modelo em relação às classes originais, possibilitando verificar se a sinalização de risco está coerente com os diferentes perfis de renda e com o objetivo de apoiar ações de qualificação cadastral.
+
+Assim, a análise cruzada entre classe_renda, probabilidades previstas e decisões de convocação evidencia que o modelo apresenta um gradiente claro de risco, coerente com a hierarquia das classes de renda. As famílias da classe 2 concentram as maiores probabilidades previstas e a maior proporção de convocações, enquanto as classes 0 e 1 permanecem majoritariamente não convocadas, mesmo quando apresentam probabilidades intermediárias.
+
+Em particular, observa-se que:
+
+* 89,2% das famílias convocadas pertencem à classe 2, indicando forte aderência do modelo ao objetivo de identificar potenciais casos acima do limiar de ½ salário mínimo;
+* As classes 0 e 1 apresentam probabilidades médias significativamente menores, com raríssimos casos classificados como alto risco;
+* O threshold elevado (0,80) atua como um filtro conservador, reduzindo o risco de convocar famílias efetivamente pobres ou de baixa renda.
+
+Esse comportamento confirma que o modelo opera como um instrumento de priorização, e não de exclusão automática, concentrando a ação administrativa nos casos com maior evidência estatística de inconsistência de renda. Abaixo segue o detalhamento dos resultados da análise:
+
+**Distribuição das convocações por classe de renda**
+
+| Classe de renda | Não convocado (pred=0) | Convocado (pred=1) |
+| --------------- | ---------------------- | ------------------ |
+| 0 – Pobreza     | 26.564                 | 1.141              |
+| 1 – Baixa renda | 50.489                 | 4.834              |
+| 2 – > ½ SM      | 67.617                 | 49.355             |
+
+**Probabilidade prevista por classe de renda**
+
+| Classe de renda | Média | P25   | Mediana | P75   | P90   | N       |
+| --------------- | ----- | ----- | ------- | ----- | ----- | ------- |
+| 0 – Pobreza     | 0,300 | 0,076 | 0,219   | 0,497 | 0,710 | 27.705  |
+| 1 – Baixa renda | 0,440 | 0,212 | 0,431   | 0,662 | 0,788 | 55.323  |
+| 2 – > ½ SM      | 0,721 | 0,618 | 0,767   | 0,870 | 0,944 | 116.972 |
+
+**Proporção de classes entre convocados e não convocados**
+
+| Situação      | Classe 0 | Classe 1 | Classe 2  |
+| ------------- | -------- | -------- | --------- |
+| Não convocado | 18,4%    | 34,9%    | 46,7%     |
+| Convocado     | 2,1%     | 8,7%     | **89,2%** |
+
+Em conjunto, os resultados indicam que o modelo é bem calibrado para diferenciar os perfis de renda, mantendo baixo risco de sobre-inclusão das classes mais vulneráveis e concentrando a sinalização de risco nas famílias com maior probabilidade de renda acima do limite de ½ salário mínimo. A manutenção da variável classe_renda mostrou-se fundamental para validar a coerência interna do modelo e reforçar sua utilidade como ferramenta técnica de apoio à gestão, permitindo transparência, rastreabilidade e interpretação substantiva dos resultados.
+
+## Organização do ML em pipeline e salvamento
+
+Para garantir a reprodutibilidade, a consistência dos resultados e a facilidade de uso do modelo ao longo do tempo, todo o fluxo de preparação dos dados e classificação foi encapsulado em um único pipeline de Machine Learning. 
+
+Esse pipeline integra o pré-processamento das variáveis (imputação de valores ausentes, normalização, codificação de variáveis categóricas e preservação de variáveis percentuais, booleanas e geográficas) com o modelo final de classificação binária, incluindo explicitamente a regra operacional de decisão baseada em threshold de probabilidade. 
+
+Após o treinamento, o pipeline completo é salvo em disco como um único artefato, garantindo que futuras aplicações utilizem exatamente as mesmas transformações e parâmetros empregados no desenvolvimento do modelo. 
+
+Adicionalmente, são gerados metadados em formato estruturado contendo informações sobre data de treinamento, tamanho das bases, variáveis utilizadas e limiar de decisão adotado, assegurando transparência, rastreabilidade e facilitando a reutilização do modelo em análises futuras ou em contextos operacionais.
+
+## Conclusão
+
+O modelo desenvolvido apresentou desempenho consistente e aderente ao objetivo proposto, alcançando elevada precisão na identificação de famílias com maior probabilidade de inconsistência entre a renda declarada e a renda provável inferida a partir de características socioeconômicas, da composição familiar e das condições do domicílio. 
+
+A estratégia de classificação binária, aliada à definição de um limiar de decisão ajustável, permitiu equilibrar capacidade preditiva e viabilidade operacional, oferecendo um critério objetivo e transparente para apoiar ações de qualificação cadastral. 
+
+Como próximo passo, o modelo poderá ser aplicado às famílias sem renda formal captada pelo CNIS, gerando uma lista priorizada de casos com maior risco de divergência de renda, a ser utilizada pelas gestões na condução de processos de verificação e atualização cadastral. 
+
+Os resultados obtidos mostram-se coerentes com a literatura especializada sobre focalização de políticas sociais e uso de aprendizado de máquina para diagnóstico de pobreza, reforçando a adequação metodológica das escolhas realizadas e o potencial do modelo como instrumento de apoio à gestão pública.
 
 ## Referências bibliográficas 
 
