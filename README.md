@@ -255,12 +255,14 @@ A identificação de colinearidade entre variáveis categóricas é particularme
 
 Dessa forma, a utilização do Cramér’s V permitiu orientar decisões de seleção e agrupamento de variáveis categóricas, contribuindo para a construção de um conjunto de atributos mais parcimonioso, interpretável e alinhado aos objetivos do modelo de triagem de inconsistências de renda.
 
-<img width="983" height="614" alt="image" src="https://github.com/user-attachments/assets/3a861194-eef3-4097-9353-8254c69bd8ca" />
+<img width="865" height="796" alt="{CF210463-4C24-4725-B362-78D8F403637F}" src="https://github.com/user-attachments/assets/581cc4c6-0111-490c-bc7d-1747618b4cdc" />
+
 
 
 Considerando que as variáveis abaixo apresentaram limiar de associação acima de 0.80, as seguintes variáveis foram excluídas: 'IN_FORMULARIO_SUP2_FAM', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'IN_FAMILIA_INDIGENA_FAM'.
 
-<img width="530" height="130" alt="{4793B5AC-B872-4A28-A08D-56C3E1A3423C}" src="https://github.com/user-attachments/assets/f1cb4bd5-3684-4764-96b3-ac363a666462" />
+<img width="522" height="129" alt="{EB6449EB-894F-46F2-8C0E-079D90446B05}" src="https://github.com/user-attachments/assets/86b79226-1fc4-4a17-a1a8-89707bf4dba5" />
+
 
 ## Pré-processamento das variáveis
 
@@ -326,11 +328,11 @@ Com o limiar de decisão ajustado para 0,80, o modelo foi configurado para atuar
 
 | Métrica                     | Valor      |
 | --------------------------- | ---------- |
-| Acurácia                    | **0,6320** |
-| Precisão (classe positiva)  | **0,8920** |
-| Revocação (classe positiva) | **0,4219** |
-| F1-score (classe positiva)  | **0,5729** |
-| Taxa de convocação          | **27,67%** |
+| Acurácia                    | **0.6309** |
+| Precisão (classe positiva)  | **0.8884** |
+| Revocação (classe positiva) | **0.3751** |
+| F1-score (classe positiva)  | **0.5275** |
+| Taxa de convocação          | **23,19%** |
 
 A elevada precisão indica que a maior parte das famílias sinalizadas pelo modelo apresenta, de fato, maior risco de inconsistência de renda, enquanto a taxa de convocação moderada assegura que o modelo possa ser utilizado como apoio à priorização de ações de qualificação cadastral, sem gerar sobrecarga excessiva aos municípios.
 
@@ -338,19 +340,20 @@ Ressalta-se, contudo, que o limiar de decisão para convocação é um parâmetr
 
 ### Matriz de confusão
 
-<img width="637" height="459" alt="{70321B46-6F28-41B8-878D-2D3AE463691B}" src="https://github.com/user-attachments/assets/ac3500b7-e603-4f8d-92f5-e616dbcdcf7c" />
+<img width="646" height="460" alt="{DD8BEB57-4B53-4007-B83E-8EE8F46600CA}" src="https://github.com/user-attachments/assets/2edd5531-e541-499f-8210-923305e4f494" />
+
 
 A matriz de confusão evidencia o comportamento do modelo no regime de triagem com threshold = 0,80. 
 
-Observa-se que a maior parte das famílias classificadas como “> ½ salário mínimo” corresponde de fato a casos positivos (49.355 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (5.975), refletindo a alta precisão do modelo. 
+Observa-se que a maior parte das famílias classificadas como “> ½ salário mínimo” corresponde de fato a casos positivos (41.203 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (5.175), refletindo a alta precisão do modelo. 
 
-Por outro lado, há um volume expressivo de falsos negativos (67.617), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado. 
+Por outro lado, há um volume expressivo de falsos negativos (68.653), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado. 
 
 Esse padrão confirma que o modelo foi intencionalmente calibrado para priorizar a confiabilidade dos casos convocados, reduzindo o risco de sobrecarga operacional nos municípios, ainda que isso implique menor sensibilidade na detecção de todos os casos potenciais.
 
 ### Curva ROC-AUC
 
-<img width="646" height="490" alt="{92E189D9-6F17-4AD4-8018-A3BA09C2B9BD}" src="https://github.com/user-attachments/assets/c72bddc3-fddd-45ea-94e4-09aad0d4191d" />
+<img width="643" height="486" alt="{29A45D2C-18FE-46C5-A874-E3930B82BE24}" src="https://github.com/user-attachments/assets/30fab25f-f5f0-4d6e-9abd-cb227de976fa" />
 
 A curva ROC evidencia boa capacidade discriminatória do modelo XGBoost, com ROC-AUC de 0,83, indicando que o modelo consegue distinguir de forma consistente famílias com maior e menor risco de inconsistência de renda ao longo de diferentes limiares de decisão. 
 
@@ -358,7 +361,7 @@ A curva posiciona-se bem acima da linha aleatória, o que demonstra que, para um
 
 ### Trade-off entre precisão, revocação e F1-score por threshold
 
-<img width="710" height="489" alt="{61BC4F19-B926-46D5-B0FB-288E6BEE03DA}" src="https://github.com/user-attachments/assets/ba611be7-28b0-44f3-8529-f6db99cb4801" />
+<img width="715" height="492" alt="{A7D0A5E1-9605-4B8C-8AD5-DF77F0F4D266}" src="https://github.com/user-attachments/assets/f8f510bd-b86d-47b2-833f-1f8ccb55e27d" />
 
 O gráfico evidencia o comportamento clássico de trade-off na classificação binária: à medida que o threshold de decisão aumenta, a precisão cresce de forma consistente, indicando que as famílias convocadas apresentam maior probabilidade real de estarem acima de ½ salário mínimo per capita. 
 
@@ -370,7 +373,7 @@ Esse resultado reforça que a escolha do limiar não é puramente técnica, mas 
 
 ### Taxa de convocação por threshold
 
-<img width="718" height="394" alt="{53104234-2F03-4203-8223-FC3D6897D44E}" src="https://github.com/user-attachments/assets/7f3a6847-51fc-4c98-b379-7308c1d692ef" />
+<img width="737" height="404" alt="{F6D68FFB-B701-448F-8D40-6D18378FAAEC}" src="https://github.com/user-attachments/assets/f1e91ab3-68ba-41a1-aa88-478aca3127d7" />
 
 O segundo mostra que o aumento do threshold reduz significativamente a proporção de famílias convocadas para ações de qualificação cadastral. 
 
@@ -382,15 +385,15 @@ Assim, o gráfico ilustra de forma clara como o threshold funciona como um parâ
 
 ### Curva de calibração
 
-<img width="732" height="482" alt="{53B1E8A0-FB5E-4B98-94F5-650737065B3E}" src="https://github.com/user-attachments/assets/5fdf8387-840f-4d3c-ac2c-1d55dcb14647" />
+<img width="705" height="486" alt="{73045B93-1791-4C0E-B3E1-127599D36FE0}" src="https://github.com/user-attachments/assets/0e07ed2a-ca1b-41d8-92cd-26f6d0320c18" />
 
 O gráfico de curva de calibração indica que o modelo apresenta boa calibração das probabilidades previstas, uma vez que a curva observada permanece muito próxima da linha ideal (y = x) ao longo de todo o intervalo. 
 
 As diferenças entre a probabilidade média prevista e a frequência observada são pequenas e próximas de zero na maioria dos bins. 
 
-Por exemplo, no bin com probabilidade média prevista de 0,36, a frequência observada foi 0,365, com diferença praticamente nula (+0,0004), enquanto no bin em torno de 0,61, a diferença foi de apenas +0,0002. 
+Por exemplo, no bin com probabilidade média prevista de 0,44, a frequência observada foi 0,45, com diferença praticamente nula (+0,008), enquanto no bin em torno de 0,65, a diferença foi de apenas -0,005. 
 
-Mesmo nos extremos, os desvios permanecem baixos, como no primeiro bin (0,068 previsto vs. 0,058 observado; −0,010) e no último (0,955 previsto vs. 0,959 observado; +0,004). 
+Mesmo nos extremos, os desvios permanecem baixos, como no primeiro bin (0,054 previsto vs. 0,040 observado; −0,014) e no último (0,943 previsto vs. 0,946 observado; +0,002). 
 
 Esses resultados indicam que as probabilidades geradas pelo modelo são consistentes e confiáveis para apoiar decisões baseadas em limiares, reforçando a adequação do uso de thresholds operacionais para priorização de ações de qualificação cadastral.
 
@@ -398,7 +401,7 @@ Esses resultados indicam que as probabilidades geradas pelo modelo são consiste
 
 A explicabilidade é um elemento central para o uso responsável de modelos de aprendizado de máquina em políticas públicas, especialmente quando os resultados subsidiam decisões administrativas que podem afetar o acesso das famílias a programas sociais. A análise das variáveis que mais contribuem para a classificação permite compreender quais características socioeconômicas e do domicílio estão associadas às previsões do modelo, aumentando a transparência, a confiança institucional e a possibilidade de validação técnica e substantiva dos resultados. Além disso, a explicabilidade é fundamental para identificar eventuais vieses, apoiar ajustes metodológicos e facilitar o diálogo com gestores e equipes responsáveis pela qualificação cadastral.
 
-<img width="788" height="449" alt="{FE615531-30D6-4944-B158-672FB608C010}" src="https://github.com/user-attachments/assets/9ad284cf-50ab-4378-bf84-c15b9e658d6e" />
+<img width="798" height="452" alt="{182DC3EE-1F29-448A-BF78-A623678E3FD5}" src="https://github.com/user-attachments/assets/b3d549b2-ff31-4b0a-9d96-f1e07f1cf0f0" />
 
 A análise de importância das variáveis do modelo XGBoost evidencia que a classificação se apoia principalmente em três dimensões: características do responsável familiar, composição da família e condições do domicílio. As variáveis que não possuem o prefixo PCT e estão relacionadas à escolaridade, inserção no trabalho e idade — como CO_AFASTADO_TRAB_MEMB, CO_PRINCIPAL_TRAB_MEMB, CO_CURSO_FREQ_PESSOA_MEMB, CO_TRABALHO_12_MESES_MEMB e IDADE_REFERENCIA — refletem atributos do responsável familiar, indicando que o modelo captura sinais de estabilidade ocupacional, nível educacional e ciclo de vida associados à renda provável do domicílio.
 
@@ -406,39 +409,39 @@ As variáveis iniciadas por PCT representam a composição da família, sintetiz
 
 ### Detalhamento - PCT_7A18_ESCOLA_PUBLICA
 
-<img width="1028" height="384" alt="{D31119D3-C725-4B9B-82D2-BB7F39E2F882}" src="https://github.com/user-attachments/assets/6c2cb711-bd09-4039-9206-929bec6cba5c" />
+<img width="1006" height="384" alt="{4A369D08-D12B-4663-A873-34E474DF9F94}" src="https://github.com/user-attachments/assets/d27010f5-e7b5-4c47-a86f-b8133d1fc43b" />
 
 O gráfico mostra uma relação inversa clara entre o percentual de adolescentes de 7 a 18 anos matriculados em escola pública (PCT_7A18_ESCOLA_PUBLICA) e a probabilidade de a família pertencer à classe com renda per capita acima de ½ salário mínimo. À medida que o percentual de adolescentes em escola pública aumenta, cresce a proporção de famílias classificadas como ≤ ½ SM, enquanto diminui a proporção da classe > ½ SM. Esse padrão é consistente com a literatura e com o contexto do Cadastro Único, indicando que a maior dependência da rede pública de ensino funciona como um proxy de menor renda e maior vulnerabilidade socioeconômica. A distribuição de observações por faixa (barras ao fundo) também mostra que o comportamento é observado em faixas com volume relevante de famílias, reforçando a robustez da associação capturada pelo modelo.
 
 ### Detalhamento - CO_AFASTADO_TRAB_MEMB
 
-<img width="802" height="398" alt="{A334E373-1882-40DB-BDD7-13E4768AAA79}" src="https://github.com/user-attachments/assets/89a56ab1-030d-49e2-9970-9897e9885d28" />
+<img width="813" height="392" alt="{342A9E0B-ECE2-4CE6-854D-2D963C3AE024}" src="https://github.com/user-attachments/assets/20ba7ed2-ba10-455b-9bea-2e579f6a8926" />
 
 O gráfico indica que a variável CO_AFASTADO_TRAB_MEMB, associada ao responsável familiar, apresenta diferença pouco acentuada na distribuição das classes de renda. Tanto entre responsáveis afastados do trabalho (1 – SIM) quanto entre aqueles não afastados (2 – NÃO), as proporções de famílias com renda ≤ ½ salário mínimo e > ½ salário mínimo permanecem muito próximas, em torno de 50%. Isso sugere que, isoladamente, o afastamento do trabalho do responsável familiar não é um fator fortemente discriminante da renda per capita no modelo, mas atua de forma complementar quando combinado com outras características de trabalho, escolaridade, composição familiar e condições do domicílio.
 
 ### Detalhamento - PCT_ADULTOS_30A59
 
-<img width="1017" height="384" alt="{00A12878-44A0-4C83-B805-578627A9DE61}" src="https://github.com/user-attachments/assets/d462f723-c209-491f-b862-e137f41121e7" />
+<img width="1014" height="393" alt="{E3F0DA3A-AF8F-4045-AE01-959B891E517D}" src="https://github.com/user-attachments/assets/0f9f537c-48af-4ccc-ac7b-c74c467a428d" />
 
 O gráfico mostra uma relação clara entre a composição etária da família e a renda per capita. À medida que aumenta o percentual de adultos entre 30 e 59 anos no domicílio, cresce de forma consistente a proporção de famílias classificadas com renda acima de ½ salário mínimo, enquanto diminui a participação das famílias com renda ≤ ½ salário mínimo. Esse padrão é coerente do ponto de vista socioeconômico, pois domicílios com maior concentração de adultos em idade potencialmente ativa tendem a apresentar maior capacidade de inserção no mercado de trabalho e geração de renda, o que explica a forte contribuição dessa variável para a classificação do modelo.
 
 ### Detalhamento - PCT_1_INFANCIA
 
-<img width="1015" height="379" alt="{617BCD91-6B65-420C-A54E-4C94B118DFC5}" src="https://github.com/user-attachments/assets/fea3836c-9db7-4ea2-8c43-43cae95d9229" />
+<img width="1012" height="388" alt="{12F6B0C0-8EDF-445C-93EC-0EFBBE316D38}" src="https://github.com/user-attachments/assets/afe5278c-67ea-43af-9939-c76d7c3f6a39" />
 
 O gráfico evidencia uma associação inversa entre a presença de crianças na primeira infância e a renda per capita familiar. À medida que aumenta o percentual de crianças pequenas no domicílio, cresce a proporção de famílias classificadas com renda ≤ ½ salário mínimo, enquanto diminui de forma acentuada a participação das famílias com renda acima de ½ salário mínimo. Esse comportamento é consistente com a literatura socioeconômica, pois domicílios com maior presença de crianças muito pequenas tendem a enfrentar maiores restrições à inserção produtiva dos adultos e maior pressão sobre a renda, o que explica a relevância dessa variável na capacidade do modelo em sinalizar potenciais inconsistências de renda.
 
 ### Detalhamento - CO_CURSO_FREQ_PESSOA_MEMB
 
-<img width="1434" height="594" alt="{E2043AB4-7DB9-45D7-BA0B-F4C84BF11733}" src="https://github.com/user-attachments/assets/9093e615-d43c-4ce6-ac7e-c6f0a8e3b744" />
+<img width="1405" height="589" alt="{566C16DD-17AD-4AD4-813A-58354DC82A17}" src="https://github.com/user-attachments/assets/71b91881-8c89-4162-a116-9d573327c53d" />
 
-O gráfico mostra uma clara relação entre o nível de escolaridade do responsável familiar e a renda domiciliar per capita. Observa-se que categorias associadas a menor escolarização — como alfabetização, ensino fundamental e EJA — concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, à medida que aumenta o nível educacional do responsável, especialmente nos grupos de ensino médio regular, pré-vestibular e ensino superior/pós-graduação, cresce de forma consistente a participação das famílias com renda acima de ½ salário mínimo. Esse padrão reforça o papel central da escolaridade do responsável familiar como proxy de inserção produtiva e capacidade de geração de renda, explicando sua elevada contribuição para a classificação realizada pelo modelo.
+O gráfico mostra uma clara relação entre o nível de escolaridade do responsável familiar e a renda domiciliar per capita. Observa-se que categorias associadas a menor escolarização — como alfabetização para adultos, ensino fundamental e EJA — concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, à medida que aumenta o nível educacional do responsável, especialmente nos grupos de ensino  pré-vestibular e ensino superior/pós-graduação, cresce de forma consistente a participação das famílias com renda acima de ½ salário mínimo. Esse padrão reforça o papel central da escolaridade do responsável familiar como proxy de inserção produtiva e capacidade de geração de renda, explicando sua elevada contribuição para a classificação realizada pelo modelo.
 
 ### Detalhamento - CO_PRINCIPAL_TRAB_MEMB
 
-<img width="1427" height="586" alt="{C4BA55F9-2328-47C6-9076-DCD71D9ABC9E}" src="https://github.com/user-attachments/assets/2eea5662-6f15-4238-a2c1-70a0962830df" />
+<img width="1389" height="585" alt="{DD45FEB0-D4B4-4CDA-8A09-F7F056CC83E1}" src="https://github.com/user-attachments/assets/c5d4508a-8593-4169-9079-063b74501e76" />
 
-O gráfico evidencia que a condição de trabalho do responsável familiar está fortemente associada ao perfil de renda das famílias. Situações mais precárias ou instáveis de inserção no mercado de trabalho, como conta própria/bico, trabalho temporário em área rural, trabalho doméstico sem carteira e condição de não remunerado, concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, vínculos mais formais e estáveis, como empregado com carteira, militar/servidor público e, sobretudo, empregador, apresentam predominância de famílias com renda acima de ½ salário mínimo. Esse padrão reforça a relevância das informações de ocupação do responsável familiar como um dos principais sinais socioeconômicos utilizados pelo modelo para identificar potenciais inconsistências entre renda declarada e renda provável.
+O gráfico evidencia que a condição de trabalho do responsável familiar está fortemente associada ao perfil de renda das famílias. Situações mais precárias ou instáveis de inserção no mercado de trabalho, como conta própria/bico, trabalho temporário em área rural, trabalho doméstico sem carteira e condição de não remunerado, concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, vínculos mais formais e estáveis, como empregado e doméstico com carteira, militar/servidor público e, sobretudo, empregador, apresentam predominância de famílias com renda acima de ½ salário mínimo. Esse padrão reforça a relevância das informações de ocupação do responsável familiar como um dos principais sinais socioeconômicos utilizados pelo modelo para identificar potenciais inconsistências entre renda declarada e renda provável.
 
 ## Análises adicionais considerando as classes de renda pobreza, baixa-renda e acima de 1/2 SM
 
@@ -463,24 +466,24 @@ Esse comportamento confirma que o modelo opera como um instrumento de priorizaç
 
 | Classe de renda | Não convocado (pred=0) | Convocado (pred=1) |
 | --------------- | ---------------------- | ------------------ |
-| 0 – Pobreza     | 26.564                 | 1.141              |
-| 1 – Baixa renda | 50.489                 | 4.834              |
-| 2 – > ½ SM      | 67.617                 | 49.355             |
+| 0 – Pobreza     | 26.727                 | 824              |
+| 1 – Baixa renda | 58.242                 | 4.351              |
+| 2 – > ½ SM      | 68.653                 | 41.203             |
 
 **Probabilidade prevista por classe de renda**
 
 | Classe de renda | Média | P25   | Mediana | P75   | P90   | N       |
 | --------------- | ----- | ----- | ------- | ----- | ----- | ------- |
-| 0 – Pobreza     | 0,300 | 0,076 | 0,219   | 0,497 | 0,710 | 27.705  |
-| 1 – Baixa renda | 0,440 | 0,212 | 0,431   | 0,662 | 0,788 | 55.323  |
-| 2 – > ½ SM      | 0,721 | 0,618 | 0,767   | 0,870 | 0,944 | 116.972 |
+| 0 – Pobreza     | 0,269 | 0,059 | 0,179   | 0,447 | 0,668 | 27.551  |
+| 1 – Baixa renda | 0,412 | 0,185 | 0,394   | 0,629 | 0,766 | 62.593  |
+| 2 – > ½ SM      | 0,698 | 0,583 | 0,742   | 0,855 | 0,935 | 109.856 |
 
 **Proporção de classes entre convocados e não convocados**
 
 | Situação      | Classe 0 | Classe 1 | Classe 2  |
 | ------------- | -------- | -------- | --------- |
-| Não convocado | 18,4%    | 34,9%    | 46,7%     |
-| Convocado     | 2,1%     | 8,7%     | **89,2%** |
+| Não convocado | 17,4%    | 37,9%    | 44,7%     |
+| Convocado     | 1,7%     | 9,4%     | **88,8%** |
 
 Em conjunto, os resultados indicam que o modelo é bem calibrado para diferenciar os perfis de renda, mantendo baixo risco de sobre-inclusão das classes mais vulneráveis e concentrando a sinalização de risco nas famílias com maior probabilidade de renda acima do limite de ½ salário mínimo. A manutenção da variável classe_renda mostrou-se fundamental para validar a coerência interna do modelo e reforçar sua utilidade como ferramenta técnica de apoio à gestão, permitindo transparência, rastreabilidade e interpretação substantiva dos resultados.
 
