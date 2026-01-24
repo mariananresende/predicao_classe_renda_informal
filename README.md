@@ -222,7 +222,7 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 
 ## Variáveis utilizadas no ML
 
-**Variável alvo**: variável binária construída a partir da renda domiciliar per capita formal observada no CNIS, sendo definida como 1 quando o valor é superior a R$ 706 (½ salário mínimo) e 0 caso contrário.
+**Variável alvo**: variável binária construída a partir da renda domiciliar per capita formal observada no CNIS, sendo definida como 1 quando o valor é superior a R$ 759 (½ salário mínimo) e 0 caso contrário.
 
 Durante o treinamento, essa variável representa a classe real de renda formalmente observada. Na aplicação do modelo a famílias sem renda formal registrada, o valor previsto de y_bin deve ser interpretado como a probabilidade de a renda efetivamente auferida pela família ser superior à renda declarada no Cadastro Único, e não como uma medida direta de renda.
 
@@ -440,8 +440,8 @@ O gráfico evidencia que a condição de trabalho do responsável familiar está
 
 As famílias do Cadastro Único foram inicialmente classificadas em três classes de renda domiciliar per capita, com base nos valores utilizados pelo MDS:
 (i) classe 0 – pobreza (≤ R$ 218),
-(ii) classe 1 – baixa renda (> R$ 218 e ≤ R$ 706) e
-(iii) classe 2 – acima de ½ salário mínimo (> R$ 706).
+(ii) classe 1 – baixa renda (> R$ 218 e ≤ R$ 759) e
+(iii) classe 2 – acima de ½ salário mínimo (> R$ 759).
 
 Embora o modelo final tenha sido desenvolvido como um classificador binário, distinguindo famílias com renda provável acima de ½ salário mínimo daquelas abaixo desse limiar, a variável classe_renda foi preservada ao longo das análises. Essa decisão permitiu uma avaliação mais aprofundada do comportamento do modelo em relação às classes originais, possibilitando verificar se a sinalização de risco está coerente com os diferentes perfis de renda e com o objetivo de apoiar ações de qualificação cadastral.
 
@@ -506,7 +506,7 @@ Os resultados obtidos mostram-se coerentes com a literatura especializada sobre 
 
 Para simular a aplicação do modelo, foi gerada uma base amostral de 1 milhão de famílias sem renda formal observada, proporcional à distribuição de famílias por município, com o objetivo de avaliar o comportamento do modelo em um cenário operacional realista.
 
-O modelo foi aplicado conforme descrito no notebook aplicacao_ML.ipynb. Como resultado, foi inicialmente gerado um arquivo intermediário com os scores do modelo para todas as famílias da amostra. Em seguida, esses resultados foram combinados com a renda declarada no Cadastro Único, de modo que apenas famílias que declararam renda per capita inferior ou igual a R$ 706, mas cujo perfil socioeconômico foi classificado pelo modelo como compatível com renda superior a esse limiar, fossem priorizadas para averiguação cadastral.
+O modelo foi aplicado conforme descrito no notebook aplicacao_ML.ipynb. Como resultado, foi inicialmente gerado um arquivo intermediário com os scores do modelo para todas as famílias da amostra. Em seguida, esses resultados foram combinados com a renda declarada no Cadastro Único, de modo que apenas famílias que declararam renda per capita inferior ou igual a R$ 759, mas cujo perfil socioeconômico foi classificado pelo modelo como compatível com renda superior a esse limiar, fossem priorizadas para averiguação cadastral.
 
 O arquivo final gerado, familias_para_averiguacao_cadastral.csv, contém apenas as famílias elegíveis à etapa de qualificação cadastral, identificadas por código anonimizado.
 
