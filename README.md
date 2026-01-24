@@ -240,7 +240,10 @@ A remoção ou consolidação de variáveis altamente correlacionadas contribui 
 
 Abaixo, segue um mapa de calor da matriz de correlação de Pearson entre as variáveis quantitativas utilizadas no modelo, permitindo identificar relações lineares fortes e potenciais redundâncias informacionais entre os atributos analisados. Destaca-se que como nenhuma variável apresentou limiar de correlação maior que 0.80, nenhuma variável quantitativa foi retirada para o desenvolvimento do modelo.
 
-<img width="1119" height="694" alt="image" src="https://github.com/user-attachments/assets/42f8310d-49e1-4209-9c6b-4a2927093575" />
+O trabalho contribui para o fortalecimento da infraestrutura nacional de dados sobre povos indígenas, oferecendo um modelo replicável de uso responsável de machine learning para qualificação de informações sensíveis, com potencial de aplicação em outros registros administrativos, como o Cadastro Único, e de apoio às estratégias de busca ativa e focalização de políticas públicas.
+
+<img width="983" height="614" alt="image" src="https://github.com/user-attachments/assets/2e5b491b-a68a-47c7-adef-34b18cc14790" />
+
 
 #### Variáveis categóricas 
 
