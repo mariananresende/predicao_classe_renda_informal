@@ -255,7 +255,8 @@ A identificação de colinearidade entre variáveis categóricas é particularme
 
 Dessa forma, a utilização do Cramér’s V permitiu orientar decisões de seleção e agrupamento de variáveis categóricas, contribuindo para a construção de um conjunto de atributos mais parcimonioso, interpretável e alinhado aos objetivos do modelo de triagem de inconsistências de renda.
 
-<img width="813" height="794" alt="{1EB71282-ECAF-4339-940A-1607102DFA0E}" src="https://github.com/user-attachments/assets/fc411f18-c65d-4629-b8ff-4d9a25a16148" />
+<img width="983" height="614" alt="image" src="https://github.com/user-attachments/assets/3a861194-eef3-4097-9353-8254c69bd8ca" />
+
 
 Considerando que as variáveis abaixo apresentaram limiar de associação acima de 0.80, as seguintes variáveis foram excluídas: 'IN_FORMULARIO_SUP2_FAM', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'IN_FAMILIA_INDIGENA_FAM'.
 
