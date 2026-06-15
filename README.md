@@ -136,6 +136,8 @@ As características socioeconômicas individuais — relacionadas à escolaridad
 
 O recorte adotado permite que o modelo aprenda padrões socioeconômicos associados à presença de renda formal observada no CNIS, sendo posteriormente aplicado para estimar a probabilidade de inconsistência entre a renda declarada e a renda provável de famílias sem renda formal captada, com o objetivo de apoiar a priorização de ações de qualificação cadastral.
 
+Os dados foram acessados via DBeaver com conexão ao banco Teradata, exclusivamente por VPN institucional, sem extração local de dados identificados. Um script SQL gerou a base já anonimizada, aplicando as limpezas e a condensação ao nível familiar. O acesso seguiu o protocolo recomendado (Portal gov.br) e o respectivo Termo de Compromisso de Manutenção de Sigilo, em conformidade com a LGPD. Cabe destacar que, embora o povoamento do CNIS atualize também rendas de aposentadoria e BPC, apenas a origem vinculada à renda do trabalho foi utilizada como critério de seleção: a inclusão de aposentadorias elevaria a proporção de famílias com idosos, criando o risco de o modelo aprender padrões associados à presença de idosos, e não às demais características socioeconômicas de interesse.
+
 ## Preparação da base
 
 Tanto na **Base famílias**, quanto na **Base pessoas** existe um número considerável de valores vazios considerando as regras de preenchimento do formulário do Cadastro Único. Assim, foi necessário olhar para as regras de preenchimento do formulário, com base no Manual do Entrevistador do Cadastro Único, de modo a identificar os valores vazios pelo fato de não serem de preenchimento obrigatório.
@@ -161,11 +163,11 @@ Após todas as limpezas descritas acima, foram excluídos os valores remanescent
 Para alguns critérios de limpeza dos valores NaN da base de pessoas foi utilizada a informação da idade da pessoa. Assim, foi criada uma coluna "IDADE_REFERENCIA", calculada a partir da subtração da data 31/11/2025 (último dia da referência da base do Cadastro Único utilizada) pela coluna "DT_NASC_PESSOA", dividido por 365.25 (dias).
 
 #### Campos relacionados ao trabalho
-Os campos 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB' só devem ser preenchidos para pessoas com 10 anos ou mais. Essa mudança aconteceu a partir de amrço/2022. Entretanto, observa-se uma quantidade muito alta de valores NaN desses campos para pessoas menores de 14 anos, conforme regra anterior.  Assim, para o caso de pessoas com idade menor que 14 anos, no campo "IDADE_REFERENCIA", os valores dos campos relacionados ao trabalho foram preenchidos com **-1**.
+Os campos 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB' só devem ser preenchidos para pessoas com 10 anos ou mais. Essa mudança aconteceu a partir de março/2022. Entretanto, observa-se uma quantidade muito alta de valores NaN desses campos para pessoas menores de 14 anos, conforme regra anterior.  Assim, para o caso de pessoas com idade menor que 14 anos, no campo "IDADE_REFERENCIA", os valores dos campos relacionados ao trabalho foram preenchidos com **-1**.
 #### Campo relacionado ao afastamento do trabalho
 O campo 'CO_AFASTADO_TRAB_MEMB' só deve ser respondido se o campo 'CO_TRABALHOU_SEMANA_MEMB' (Pessoa trabalhou na semana passada?) for respondido como "2 - Não". Assim, para os casos de resposta diferente de 2, os valores vazios do campo 'CO_AFASTADO_TRAB_MEMB' foram preenchidos com **-1**.
 #### Campo relacionado à atividade extrativista e ao trabalho principal
-O campo 'CO_AGRICULTURA_TRAB_MEMB' (É atividade extrativista? 1 - Sim e 2 - Não) e o campo 'CO_AGRICULTURA_TRAB_MEMB' só são obrigatórios se a pessoa respondeu 1 - Sim no campo 'CO_TRABALHOU_SEMANA_MEMB'(Pessoa trabalhou na semana passada?) ou no campo 'CO_AFASTADO_TRAB_MEMB' (Pessoa afastada na semana passada?). Assim, para o caso em que os 'CO_TRABALHOU_SEMANA_MEMB' e 'CO_AFASTADO_TRAB_MEMB' tiveram resposta "2 - Não" os valores vazios de 'CO_AGRICULTURA_TRAB_MEMB' e de 'CO_AGRICULTURA_TRAB_MEMB' foram substituídos por **-1**. 
+O campo 'CO_AGRICULTURA_TRAB_MEMB' (É atividade extrativista? 1 - Sim e 2 - Não) e o campo 'CO_PRINCIPAL_TRAB_MEMB' só são obrigatórios se a pessoa respondeu 1 - Sim no campo 'CO_TRABALHOU_SEMANA_MEMB'(Pessoa trabalhou na semana passada?) ou no campo 'CO_AFASTADO_TRAB_MEMB' (Pessoa afastada na semana passada?). Assim, para o caso em que os 'CO_TRABALHOU_SEMANA_MEMB' e 'CO_AFASTADO_TRAB_MEMB' tiveram resposta "2 - Não" os valores vazios de 'CO_AGRICULTURA_TRAB_MEMB' e de 'CO_PRINCIPAL_TRAB_MEMB' foram substituídos por **-1**. 
 #### Campo frequenta escola
 Os campos  'CO_CURSO_FREQUENTA_MEMB' só deve ser preenchido se a pessoa respondeu "1 - Sim, rede pública", "2 - Sim, rede particular" no campo 'IN_FREQUENTA_ESCOLA_MEMB'. Desta forma, quando o campo 'IN_FREQUENTA_ESCOLA_MEMB' foi preenchido com valor diferente de 1 ou 2, os campos vazios de 'CO_CURSO_FREQUENTA_MEMB' foram preenchidos com **-1**.
 #### Campo curso que a pessoa < 6 anos frequenta
@@ -196,7 +198,7 @@ Foi calculado o percentual de pessoas em uma mesma família que estão na faixa 
 Foi criado um marcador para identificar as famílias que possuem (=1) pelo menos uma criança entre 7 e 11 anos fora da escola, ou seja, 'IN_FREQUENTA_ESCOLA_MEMB' = 3.
 #### TEM_ADOLESCENTE_SEM_ESCOLA - Marcação tem adolescente fora da escola
 Foi criado um marcador para identificar as famílias que possuem (=1) pelo menos um adolescente entre 12 e 18 anos fora da escola, ou seja, 'IN_FREQUENTA_ESCOLA_MEMB' = 3.
-#### PCT_PES_NAO_ANALFABETIZADA - Percentual de pessoas não alfabetizadas
+#### PCT_PES_ANALFABETA - Percentual de pessoas não alfabetizadas
 Foi calculado o percentual de pessoas acima de 10 anos que marcaram "2 - não", no campo "CO_SABE_LER_ESCREVER_MEMB".
 #### PCT_ADULTO_NUNCA_FREQ_ESCOLA - Percentual de adultos que nunca frequentaram escola
 Foi calculado o percentual de pessoas acima de 18 anos que marcaram "4 - Nunca frequentou" no campo 'IN_FREQUENTA_ESCOLA_MEMB'.
@@ -222,11 +224,13 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 
 ## Variáveis utilizadas no ML
 
+Para o treinamento foi utilizada uma amostra de aproximadamente 1 milhão de famílias, construída de forma proporcional à distribuição real das classes de renda (≈41,5% até ½ SM e 58,5% acima). Amostras artificialmente balanceadas foram testadas, mas apresentaram desempenho inferior, com menor estabilidade e calibração. Avaliou-se ainda uma estratificação pela composição familiar — motivada pela diferença entre o Cadastro Único (25,1% de casais; 40,9% de responsáveis do sexo feminino sem cônjuge) e os Censos do IBGE —, mas a imposição de proporções fixas degradou o desempenho e foi descartada, ficando o tema indicado para investigações futuras.
+
 **Variável alvo**: variável binária construída a partir da renda domiciliar per capita formal observada no CNIS, sendo definida como 1 quando o valor é superior a R$ 759 (½ salário mínimo) e 0 caso contrário.
 
 Durante o treinamento, essa variável representa a classe real de renda formalmente observada. Na aplicação do modelo a famílias sem renda formal registrada, o valor previsto de y_bin deve ser interpretado como a probabilidade de a renda efetivamente auferida pela família ser superior à renda declarada no Cadastro Único, e não como uma medida direta de renda.
 
-**Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_INDIGENA_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB', 'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
+**Variáveis explicativas**: 'IN_TRABALHO_INFANTIL_FAM', 'CO_MUNIC_IBGE_2_FAM', 'CO_MUNIC_IBGE_5_FAM', 'IN_FORMULARIO_SUP2_FAM', 'QT_PESSOAS_DOMIC_FAM', 'QT_FAMILIAS_DOMIC_FAM', 'CO_ESPECIE_DOMIC_FAM', 'CO_LOCAL_DOMIC_FAM', 'QT_COMODOS_DOMIC_FAM', 'QT_COMODOS_DORMITORIO_FAM', 'CO_MATERIAL_DOMIC_FAM', 'CO_MATERIAL_PISO_FAM', 'CO_AGUA_CANALIZADA_FAM', 'CO_ABASTE_AGUA_DOMIC_FAM', 'CO_BANHEIRO_DOMIC_FAM', 'CO_ESCOA_SANITARIO_DOMIC_FAM', 'CO_ILUMINACAO_DOMIC_FAM', 'IN_FAMILIA_QUILOMBOLA_FAM', 'IN_PARC_MDS_FAM', 'CO_EST_CADASTRAL_MEMB', 'CO_SEXO_PESSOA', 'IDADE_REFERENCIA', 'CO_RACA_COR_PESSOA', 'CO_DEFICIENCIA_MEMB', 'CO_SABE_LER_ESCREVER_MEMB', 'IN_FREQUENTA_ESCOLA_MEMB', 'CO_CURSO_FREQUENTA_MEMB', 'CO_CURSO_FREQ_PESSOA_MEMB', 'CO_AFASTADO_TRAB_MEMB', 'CO_PRINCIPAL_TRAB_MEMB', 'CO_TRABALHO_12_MESES_MEMB', 'QTD_PESSOAS', 'PCT_1_INFANCIA', 'PCT_CRIANCAS_7A11', 'PCT_ADOLESCENTES_12A18', 'PCT_JOVENS_19A29', 'PCT_ADULTOS_30A59', 'PCT_IDOSOS_60A64', 'PCT_IDOSOS_BPC', 'PCT_PES_DEFICIENCIA', 'TEM_CRIANCA_SEM_ESCOLA', 'TEM_ADOLESCENTE_SEM_ESCOLA', 'PCT_PES_ANALFABETA','PCT_ADULTO_NUNCA_FREQ_ESCOLA', 'PCT_7A18_ESCOLA_PUBLICA', 'PCT_MENOR6_FORA_CRECHE_PRE'
 
 ### Análise de correlação das variáveis
 
@@ -239,8 +243,6 @@ A identificação de pares de variáveis com correlação absoluta elevada (|r| 
 A remoção ou consolidação de variáveis altamente correlacionadas contribui para mitigar efeitos de multicolinearidade, reduzir ruído estatístico e fortalecer a explicabilidade dos resultados. 
 
 Abaixo, segue um mapa de calor da matriz de correlação de Pearson entre as variáveis quantitativas utilizadas no modelo, permitindo identificar relações lineares fortes e potenciais redundâncias informacionais entre os atributos analisados. Destaca-se que como nenhuma variável apresentou limiar de correlação maior que 0.80, nenhuma variável quantitativa foi retirada para o desenvolvimento do modelo.
-
-O trabalho contribui para o fortalecimento da infraestrutura nacional de dados sobre povos indígenas, oferecendo um modelo replicável de uso responsável de machine learning para qualificação de informações sensíveis, com potencial de aplicação em outros registros administrativos, como o Cadastro Único, e de apoio às estratégias de busca ativa e focalização de políticas públicas.
 
 <img width="983" height="614" alt="image" src="https://github.com/user-attachments/assets/2e5b491b-a68a-47c7-adef-34b18cc14790" />
 
@@ -255,30 +257,25 @@ A identificação de colinearidade entre variáveis categóricas é particularme
 
 Dessa forma, a utilização do Cramér’s V permitiu orientar decisões de seleção e agrupamento de variáveis categóricas, contribuindo para a construção de um conjunto de atributos mais parcimonioso, interpretável e alinhado aos objetivos do modelo de triagem de inconsistências de renda.
 
-<img width="865" height="796" alt="{CF210463-4C24-4725-B362-78D8F403637F}" src="https://github.com/user-attachments/assets/581cc4c6-0111-490c-bc7d-1747618b4cdc" />
+
+<img width="714" height="714" alt="image" src="https://github.com/user-attachments/assets/26e968b9-b4af-4c38-95ea-512bfbb3fe27" />
 
 
 
-Considerando que as variáveis abaixo apresentaram limiar de associação acima de 0.80, as seguintes variáveis foram excluídas: 'IN_FORMULARIO_SUP2_FAM', 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'IN_FAMILIA_INDIGENA_FAM'.
+Considerando que as variáveis abaixo apresentaram limiar de associação acima de 0.80, as seguintes variáveis foram excluídas: 'CO_TRABALHOU_SEMANA_MEMB', 'CO_AGRICULTURA_TRAB_MEMB', 'IN_FAMILIA_INDIGENA_FAM'.
 
-<img width="522" height="129" alt="{EB6449EB-894F-46F2-8C0E-079D90446B05}" src="https://github.com/user-attachments/assets/86b79226-1fc4-4a17-a1a8-89707bf4dba5" />
+
+<img width="525" height="104" alt="image" src="https://github.com/user-attachments/assets/f6d67785-72c7-45fe-84c5-306c92fe4f2c" />
+
 
 
 ## Pré-processamento das variáveis
 
-Antes do treinamento dos modelos de aprendizado de máquina, foi realizada uma etapa estruturada de pré-processamento das variáveis, com o objetivo de garantir consistência estatística, reduzir vieses decorrentes de escalas distintas e tornar os dados adequados aos algoritmos utilizados. 
+A base analítica é carregada já pronta a partir do script SQL, que realiza toda a engenharia de variáveis — limpeza dos valores ausentes conforme as regras de preenchimento do Cadastro Único (preenchimento lógico com o código **-1** para "não se aplica" e exclusão das linhas com ausentes remanescentes) e condensação das informações do nível de pessoa para o nível de família. **Não é aplicada imputação de valores ausentes em nenhuma etapa**: a base chega ao ambiente de modelagem completa e sem valores nulos.
 
-As variáveis foram previamente classificadas conforme sua natureza — quantitativas contínuas, percentuais, categóricas binárias, categóricas multicategóricas, booleanas e geográficas — permitindo a aplicação de transformações específicas a cada grupo. 
+No ambiente de modelagem, aplica-se apenas um pré-processamento estatístico leve, necessário para adequar as escalas das variáveis aos algoritmos. As variáveis quantitativas contínuas são normalizadas por escalonamento Min–Max, assegurando comparabilidade entre atributos com diferentes ordens de grandeza, e as categóricas multicategóricas são codificadas via one-hot encoding, preservando a informação sem impor ordens artificiais entre categorias. As variáveis percentuais e booleanas, por já se encontrarem em escalas compatíveis, as binárias e as geográficas — estas últimas para evitar a criação excessiva de colunas — são mantidas em sua forma original (passthrough).
 
-Variáveis quantitativas contínuas tiveram valores ausentes imputados pela mediana e foram normalizadas por meio do escalonamento Min–Max, assegurando comparabilidade entre atributos com diferentes ordens de grandeza. 
-
-Variáveis categóricas multicategóricas foram tratadas com imputação pela moda e codificadas via one-hot encoding, preservando informação sem impor ordens artificiais entre categorias, enquanto variáveis categóricas binárias receberam apenas imputação da categoria mais frequente. 
-
-Variáveis percentuais e booleanas, por já se encontrarem em escalas compatíveis, foram mantidas sem transformação adicional. 
-
-Por fim, variáveis geográficas foram preservadas em sua forma original, evitando a criação excessiva de colunas decorrente da codificação one-hot de identificadores territoriais. 
-
-Esse processo de pré-processamento foi encapsulado em um ColumnTransformer, assegurando reprodutibilidade, coerência entre treino e aplicação do modelo e alinhamento metodológico com o uso de dados administrativos complexos, como os do Cadastro Único.
+Esse pré-processamento é encapsulado em um ColumnTransformer, assegurando reprodutibilidade e coerência entre as fases de treinamento e aplicação do modelo.
 
 ## Treinamento e comparação de modelos de classificação
 
@@ -328,11 +325,11 @@ Com o limiar de decisão ajustado para 0,80, o modelo foi configurado para atuar
 
 | Métrica                     | Valor      |
 | --------------------------- | ---------- |
-| Acurácia                    | **0.6309** |
-| Precisão (classe positiva)  | **0.8884** |
-| Revocação (classe positiva) | **0.3751** |
-| F1-score (classe positiva)  | **0.5275** |
-| Taxa de convocação          | **23,19%** |
+| Acurácia                    | **0.6204** |
+| Precisão (classe positiva)  | **0.8925** |
+| Revocação (classe positiva) | **0.3615** |
+| F1-score (classe positiva)  | **0.5146** |
+| Taxa de convocação          | **22,56%** |
 
 A elevada precisão indica que a maior parte das famílias sinalizadas pelo modelo apresenta, de fato, maior risco de inconsistência de renda, enquanto a taxa de convocação moderada assegura que o modelo possa ser utilizado como apoio à priorização de ações de qualificação cadastral, sem gerar sobrecarga excessiva aos municípios.
 
@@ -340,28 +337,27 @@ Ressalta-se, contudo, que o limiar de decisão para convocação é um parâmetr
 
 ### Matriz de confusão
 
-<img width="646" height="460" alt="{DD8BEB57-4B53-4007-B83E-8EE8F46600CA}" src="https://github.com/user-attachments/assets/2edd5531-e541-499f-8210-923305e4f494" />
-
+<img width="549" height="412" alt="image" src="https://github.com/user-attachments/assets/635042ca-4688-44ca-9b36-c29f34351a2f" />
 
 A matriz de confusão evidencia o comportamento do modelo no regime de triagem com threshold = 0,80. 
 
-Observa-se que a maior parte das famílias classificadas como “> ½ salário mínimo” corresponde de fato a casos positivos (41.203 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (5.175), refletindo a alta precisão do modelo. 
+Observa-se que a maior parte das famílias classificadas como "> ½ salário mínimo" corresponde de fato a casos positivos (40.277 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (4.851), refletindo a alta precisão do modelo. 
 
-Por outro lado, há um volume expressivo de falsos negativos (68.653), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado. 
+Por outro lado, há um volume expressivo de falsos negativos (71.140), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado.
 
 Esse padrão confirma que o modelo foi intencionalmente calibrado para priorizar a confiabilidade dos casos convocados, reduzindo o risco de sobrecarga operacional nos municípios, ainda que isso implique menor sensibilidade na detecção de todos os casos potenciais.
 
 ### Curva ROC-AUC
 
-<img width="643" height="486" alt="{29A45D2C-18FE-46C5-A874-E3930B82BE24}" src="https://github.com/user-attachments/assets/30fab25f-f5f0-4d6e-9abd-cb227de976fa" />
+<img width="535" height="445" alt="image" src="https://github.com/user-attachments/assets/0e6f084a-c956-476f-ac2c-dbcb323a0fcf" />
 
-A curva ROC evidencia boa capacidade discriminatória do modelo XGBoost, com ROC-AUC de 0,83, indicando que o modelo consegue distinguir de forma consistente famílias com maior e menor risco de inconsistência de renda ao longo de diferentes limiares de decisão. 
+A curva ROC evidencia boa capacidade discriminatória do modelo XGBoost, com ROC-AUC de 0,826, indicando que o modelo consegue distinguir de forma consistente famílias com maior e menor risco de inconsistência de renda ao longo de diferentes limiares de decisão. 
 
 A curva posiciona-se bem acima da linha aleatória, o que demonstra que, para uma ampla faixa de taxas de falsos positivos, o modelo mantém taxas relativamente elevadas de verdadeiros positivos, reforçando sua adequação como instrumento de triagem e priorização no processo de qualificação cadastral.
 
 ### Trade-off entre precisão, revocação e F1-score por threshold
 
-<img width="715" height="492" alt="{A7D0A5E1-9605-4B8C-8AD5-DF77F0F4D266}" src="https://github.com/user-attachments/assets/f8f510bd-b86d-47b2-833f-1f8ccb55e27d" />
+<img width="648" height="438" alt="image" src="https://github.com/user-attachments/assets/8c049008-c8a1-4c56-b106-087709e935b1" />
 
 O gráfico evidencia o comportamento clássico de trade-off na classificação binária: à medida que o threshold de decisão aumenta, a precisão cresce de forma consistente, indicando que as famílias convocadas apresentam maior probabilidade real de estarem acima de ½ salário mínimo per capita. 
 
@@ -373,9 +369,9 @@ Esse resultado reforça que a escolha do limiar não é puramente técnica, mas 
 
 ### Taxa de convocação por threshold
 
-<img width="737" height="404" alt="{F6D68FFB-B701-448F-8D40-6D18378FAAEC}" src="https://github.com/user-attachments/assets/f1e91ab3-68ba-41a1-aa88-478aca3127d7" />
+<img width="631" height="351" alt="image" src="https://github.com/user-attachments/assets/66e2cc93-71c0-490d-af7f-a14944ee5d1f" />
 
-O segundo mostra que o aumento do threshold reduz significativamente a proporção de famílias convocadas para ações de qualificação cadastral. 
+O segundo gráfico mostra que o aumento do threshold reduz significativamente a proporção de famílias convocadas para ações de qualificação cadastral. 
 
 Em thresholds mais baixos, o modelo sinaliza um volume elevado de famílias, o que pode gerar sobrecarga operacional para os municípios. 
 
@@ -385,15 +381,15 @@ Assim, o gráfico ilustra de forma clara como o threshold funciona como um parâ
 
 ### Curva de calibração
 
-<img width="705" height="486" alt="{73045B93-1791-4C0E-B3E1-127599D36FE0}" src="https://github.com/user-attachments/assets/0e07ed2a-ca1b-41d8-92cd-26f6d0320c18" />
+<img width="625" height="435" alt="image" src="https://github.com/user-attachments/assets/cee30c27-0bed-4b25-8267-be5d516fa33b" />
 
 O gráfico de curva de calibração indica que o modelo apresenta boa calibração das probabilidades previstas, uma vez que a curva observada permanece muito próxima da linha ideal (y = x) ao longo de todo o intervalo. 
 
 As diferenças entre a probabilidade média prevista e a frequência observada são pequenas e próximas de zero na maioria dos bins. 
 
-Por exemplo, no bin com probabilidade média prevista de 0,44, a frequência observada foi 0,45, com diferença praticamente nula (+0,008), enquanto no bin em torno de 0,65, a diferença foi de apenas -0,005. 
+Por exemplo, no bin com probabilidade média prevista de 0,46, a frequência observada foi 0,47, com diferença praticamente nula (+0,007), enquanto no bin em torno de 0,65, a diferença foi de apenas -0,0011. 
 
-Mesmo nos extremos, os desvios permanecem baixos, como no primeiro bin (0,054 previsto vs. 0,040 observado; −0,014) e no último (0,943 previsto vs. 0,946 observado; +0,002). 
+Mesmo nos extremos, os desvios permanecem baixos, como no primeiro bin (0,0617 previsto vs. 0,0480 observado; −0,0137) e no último (0,943 previsto vs. 0,947 observado; +0,004). 
 
 Esses resultados indicam que as probabilidades geradas pelo modelo são consistentes e confiáveis para apoiar decisões baseadas em limiares, reforçando a adequação do uso de thresholds operacionais para priorização de ações de qualificação cadastral.
 
@@ -401,45 +397,45 @@ Esses resultados indicam que as probabilidades geradas pelo modelo são consiste
 
 A explicabilidade é um elemento central para o uso responsável de modelos de aprendizado de máquina em políticas públicas, especialmente quando os resultados subsidiam decisões administrativas que podem afetar o acesso das famílias a programas sociais. A análise das variáveis que mais contribuem para a classificação permite compreender quais características socioeconômicas e do domicílio estão associadas às previsões do modelo, aumentando a transparência, a confiança institucional e a possibilidade de validação técnica e substantiva dos resultados. Além disso, a explicabilidade é fundamental para identificar eventuais vieses, apoiar ajustes metodológicos e facilitar o diálogo com gestores e equipes responsáveis pela qualificação cadastral.
 
-<img width="798" height="452" alt="{182DC3EE-1F29-448A-BF78-A623678E3FD5}" src="https://github.com/user-attachments/assets/b3d549b2-ff31-4b0a-9d96-f1e07f1cf0f0" />
+<img width="714" height="410" alt="image" src="https://github.com/user-attachments/assets/c93e9df0-63c9-4fe7-bb7e-a5b0a631a6a5" />
 
-A análise de importância das variáveis do modelo XGBoost evidencia que a classificação se apoia principalmente em três dimensões: características do responsável familiar, composição da família e condições do domicílio. As variáveis que não possuem o prefixo PCT e estão relacionadas à escolaridade, inserção no trabalho e idade — como CO_AFASTADO_TRAB_MEMB, CO_PRINCIPAL_TRAB_MEMB, CO_CURSO_FREQ_PESSOA_MEMB, CO_TRABALHO_12_MESES_MEMB e IDADE_REFERENCIA — refletem atributos do responsável familiar, indicando que o modelo captura sinais de estabilidade ocupacional, nível educacional e ciclo de vida associados à renda provável do domicílio.
+A análise de importância das variáveis do modelo XGBoost evidencia que a classificação se apoia principalmente em três dimensões: características do responsável familiar, composição da família e condições do domicílio. As variáveis que não possuem o prefixo PCT e estão relacionadas à escolaridade, inserção no trabalho e idade — como CO_AFASTADO_TRAB_MEMB, CO_CURSO_FREQ_PESSOA_MEMB, CO_PRINCIPAL_TRAB_MEMB e CO_TRABALHO_12_MESES_MEMB — refletem atributos do responsável familiar, indicando que o modelo captura sinais de estabilidade ocupacional, nível educacional e ciclo de vida associados à renda provável do domicílio.
 
-As variáveis iniciadas por PCT representam a composição da família, sintetizando a distribuição etária e educacional dos membros, com destaque para o percentual de adolescentes em escola pública (PCT_7A18_ESCOLA_PUBLICA), de adultos em idade ativa (PCT_ADULTOS_30A59) e a presença de crianças e adolescentes. Complementarmente, variáveis relacionadas às condições do domicílio, como material do piso e tipo de iluminação, também contribuem para a classificação, funcionando como proxies de bem-estar material. Em conjunto, esses resultados indicam que o modelo aprende padrões socioeconômicos coerentes e interpretáveis, alinhados ao objetivo de apoiar a qualificação cadastral.
+As variáveis iniciadas por PCT representam a composição da família, sintetizando a distribuição etária e educacional dos membros, com destaque para o percentual de adolescentes em escola pública (PCT_7A18_ESCOLA_PUBLICA), de adultos em idade ativa (PCT_ADULTOS_30A59) e a presença de crianças e adolescentes. Complementarmente, variáveis relacionadas às condições do domicílio, como material do piso e quantidade de cômodos, também contribuem para a classificação, funcionando como proxies de bem-estar material. Em conjunto, esses resultados indicam que o modelo aprende padrões socioeconômicos coerentes e interpretáveis, alinhados ao objetivo de apoiar a qualificação cadastral.
 
 ### Detalhamento - PCT_7A18_ESCOLA_PUBLICA
 
-<img width="1006" height="384" alt="{4A369D08-D12B-4663-A873-34E474DF9F94}" src="https://github.com/user-attachments/assets/d27010f5-e7b5-4c47-a86f-b8133d1fc43b" />
+<img width="912" height="355" alt="image" src="https://github.com/user-attachments/assets/66cd88c3-2d74-4719-8e7a-450316f0a674" />
 
-O gráfico mostra uma relação inversa clara entre o percentual de adolescentes de 7 a 18 anos matriculados em escola pública (PCT_7A18_ESCOLA_PUBLICA) e a probabilidade de a família pertencer à classe com renda per capita acima de ½ salário mínimo. À medida que o percentual de adolescentes em escola pública aumenta, cresce a proporção de famílias classificadas como ≤ ½ SM, enquanto diminui a proporção da classe > ½ SM. Esse padrão é consistente com a literatura e com o contexto do Cadastro Único, indicando que a maior dependência da rede pública de ensino funciona como um proxy de menor renda e maior vulnerabilidade socioeconômica. A distribuição de observações por faixa (barras ao fundo) também mostra que o comportamento é observado em faixas com volume relevante de famílias, reforçando a robustez da associação capturada pelo modelo.
-
-### Detalhamento - CO_AFASTADO_TRAB_MEMB
-
-<img width="813" height="392" alt="{342A9E0B-ECE2-4CE6-854D-2D963C3AE024}" src="https://github.com/user-attachments/assets/20ba7ed2-ba10-455b-9bea-2e579f6a8926" />
-
-O gráfico indica que a variável CO_AFASTADO_TRAB_MEMB, associada ao responsável familiar, apresenta diferença pouco acentuada na distribuição das classes de renda. Tanto entre responsáveis afastados do trabalho (1 – SIM) quanto entre aqueles não afastados (2 – NÃO), as proporções de famílias com renda ≤ ½ salário mínimo e > ½ salário mínimo permanecem muito próximas, em torno de 50%. Isso sugere que, isoladamente, o afastamento do trabalho do responsável familiar não é um fator fortemente discriminante da renda per capita no modelo, mas atua de forma complementar quando combinado com outras características de trabalho, escolaridade, composição familiar e condições do domicílio.
+O gráfico mostra uma relação inversa clara entre o percentual de adolescentes de 7 a 18 anos matriculados em escola pública (PCT_7A18_ESCOLA_PUBLICA) e a probabilidade de a família pertencer à classe com renda per capita acima de ½ salário mínimo. À medida que o percentual de adolescentes em escola pública aumenta, cresce a proporção de famílias classificadas como ≤ ½ SM, enquanto diminui a proporção da classe > ½ SM. Esse padrão é consistente com a literatura e com o contexto do Cadastro Único, indicando que a maior dependência da rede pública de ensino funciona como um proxy de menor renda e maior vulnerabilidade socioeconômica. 
 
 ### Detalhamento - PCT_ADULTOS_30A59
 
-<img width="1014" height="393" alt="{E3F0DA3A-AF8F-4045-AE01-959B891E517D}" src="https://github.com/user-attachments/assets/0f9f537c-48af-4ccc-ac7b-c74c467a428d" />
+<img width="906" height="346" alt="image" src="https://github.com/user-attachments/assets/b9671f4d-5082-4870-af0e-244194379ad1" />
 
 O gráfico mostra uma relação clara entre a composição etária da família e a renda per capita. À medida que aumenta o percentual de adultos entre 30 e 59 anos no domicílio, cresce de forma consistente a proporção de famílias classificadas com renda acima de ½ salário mínimo, enquanto diminui a participação das famílias com renda ≤ ½ salário mínimo. Esse padrão é coerente do ponto de vista socioeconômico, pois domicílios com maior concentração de adultos em idade potencialmente ativa tendem a apresentar maior capacidade de inserção no mercado de trabalho e geração de renda, o que explica a forte contribuição dessa variável para a classificação do modelo.
 
-### Detalhamento - PCT_1_INFANCIA
+### Detalhamento - CO_AFASTADO_TRAB_MEMB
 
-<img width="1012" height="388" alt="{12F6B0C0-8EDF-445C-93EC-0EFBBE316D38}" src="https://github.com/user-attachments/assets/afe5278c-67ea-43af-9939-c76d7c3f6a39" />
+<img width="742" height="361" alt="image" src="https://github.com/user-attachments/assets/e8a85215-81a5-46d1-9b7e-eae8248af0a5" />
 
-O gráfico evidencia uma associação inversa entre a presença de crianças na primeira infância e a renda per capita familiar. À medida que aumenta o percentual de crianças pequenas no domicílio, cresce a proporção de famílias classificadas com renda ≤ ½ salário mínimo, enquanto diminui de forma acentuada a participação das famílias com renda acima de ½ salário mínimo. Esse comportamento é consistente com a literatura socioeconômica, pois domicílios com maior presença de crianças muito pequenas tendem a enfrentar maiores restrições à inserção produtiva dos adultos e maior pressão sobre a renda, o que explica a relevância dessa variável na capacidade do modelo em sinalizar potenciais inconsistências de renda.
+O gráfico indica que a variável CO_AFASTADO_TRAB_MEMB, associada ao responsável familiar, apresenta diferença pouco acentuada na distribuição das classes de renda. Tanto entre responsáveis afastados do trabalho (1 – SIM) quanto entre aqueles não afastados (2 – NÃO), as proporções de famílias com renda ≤ ½ salário mínimo e > ½ salário mínimo permanecem muito próximas, em torno de 50%. Isso sugere que, isoladamente, o afastamento do trabalho do responsável familiar não é um fator fortemente discriminante da renda per capita no modelo, mas atua de forma complementar quando combinado com outras características de trabalho, escolaridade, composição familiar e condições do domicílio.
 
 ### Detalhamento - CO_CURSO_FREQ_PESSOA_MEMB
 
-<img width="1405" height="589" alt="{566C16DD-17AD-4AD4-813A-58354DC82A17}" src="https://github.com/user-attachments/assets/71b91881-8c89-4162-a116-9d573327c53d" />
+<img width="994" height="360" alt="image" src="https://github.com/user-attachments/assets/76b6e260-02ca-4a48-a13d-638b83e89ff6" />
 
 O gráfico mostra uma clara relação entre o nível de escolaridade do responsável familiar e a renda domiciliar per capita. Observa-se que categorias associadas a menor escolarização — como alfabetização para adultos, ensino fundamental e EJA — concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, à medida que aumenta o nível educacional do responsável, especialmente nos grupos de ensino  pré-vestibular e ensino superior/pós-graduação, cresce de forma consistente a participação das famílias com renda acima de ½ salário mínimo. Esse padrão reforça o papel central da escolaridade do responsável familiar como proxy de inserção produtiva e capacidade de geração de renda, explicando sua elevada contribuição para a classificação realizada pelo modelo.
 
+### Detalhamento - PCT_1_INFANCIA
+
+<img width="920" height="347" alt="image" src="https://github.com/user-attachments/assets/42aaef3b-1d48-4f34-825a-ffc0321df9d2" />
+
+O gráfico evidencia uma associação inversa entre a presença de crianças na primeira infância e a renda per capita familiar. À medida que aumenta o percentual de crianças pequenas no domicílio, cresce a proporção de famílias classificadas com renda ≤ ½ salário mínimo, enquanto diminui de forma acentuada a participação das famílias com renda acima de ½ salário mínimo. Esse comportamento é consistente com a literatura socioeconômica, pois domicílios com maior presença de crianças muito pequenas tendem a enfrentar maiores restrições à inserção produtiva dos adultos e maior pressão sobre a renda, o que explica a relevância dessa variável na capacidade do modelo em sinalizar potenciais inconsistências de renda.
+
 ### Detalhamento - CO_PRINCIPAL_TRAB_MEMB
 
-<img width="1389" height="585" alt="{DD45FEB0-D4B4-4CDA-8A09-F7F056CC83E1}" src="https://github.com/user-attachments/assets/c5d4508a-8593-4169-9079-063b74501e76" />
+<img width="736" height="352" alt="image" src="https://github.com/user-attachments/assets/1413170a-aa16-41b5-9239-e9152163eea8" />
 
 O gráfico evidencia que a condição de trabalho do responsável familiar está fortemente associada ao perfil de renda das famílias. Situações mais precárias ou instáveis de inserção no mercado de trabalho, como conta própria/bico, trabalho temporário em área rural, trabalho doméstico sem carteira e condição de não remunerado, concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, vínculos mais formais e estáveis, como empregado e doméstico com carteira, militar/servidor público e, sobretudo, empregador, apresentam predominância de famílias com renda acima de ½ salário mínimo. Esse padrão reforça a relevância das informações de ocupação do responsável familiar como um dos principais sinais socioeconômicos utilizados pelo modelo para identificar potenciais inconsistências entre renda declarada e renda provável.
 
@@ -466,36 +462,56 @@ Esse comportamento confirma que o modelo opera como um instrumento de priorizaç
 
 | Classe de renda | Não convocado (pred=0) | Convocado (pred=1) |
 | --------------- | ---------------------- | ------------------ |
-| 0 – Pobreza     | 26.727                 | 824              |
-| 1 – Baixa renda | 58.242                 | 4.351              |
-| 2 – > ½ SM      | 68.653                 | 41.203             |
+| 0 – Pobreza     | 	25.396                 | 761              |
+| 1 – Baixa renda | 58.336                | 4.090              |
+| 2 – > ½ SM      | 71.140                 | 40.277            |
 
 **Probabilidade prevista por classe de renda**
 
 | Classe de renda | Média | P25   | Mediana | P75   | P90   | N       |
 | --------------- | ----- | ----- | ------- | ----- | ----- | ------- |
-| 0 – Pobreza     | 0,269 | 0,059 | 0,179   | 0,447 | 0,668 | 27.551  |
-| 1 – Baixa renda | 0,412 | 0,185 | 0,394   | 0,629 | 0,766 | 62.593  |
-| 2 – > ½ SM      | 0,698 | 0,583 | 0,742   | 0,855 | 0,935 | 109.856 |
+| 0 – Pobreza     | 0.283 | 0.067 | 0.199   | 0.472 | 0.680 | 26.157  |
+| 1 – Baixa renda | 0.420 | 0.196 | 0.407   | 0.635 | 0.762 | 62.426  |
+| 2 – > ½ SM      | 0.698 | 0.586 | 0.738   | 0.849 | 0.933 | 111.417 |
 
 **Proporção de classes entre convocados e não convocados**
 
 | Situação      | Classe 0 | Classe 1 | Classe 2  |
 | ------------- | -------- | -------- | --------- |
-| Não convocado | 17,4%    | 37,9%    | 44,7%     |
-| Convocado     | 1,7%     | 9,4%     | **88,8%** |
+| Não convocado | 16,4%    | 37,6%    | 45,9%     |
+| Convocado     | 1,7%     | 9,0%     | **89,2%** |
 
 Em conjunto, os resultados indicam que o modelo é bem calibrado para diferenciar os perfis de renda, mantendo baixo risco de sobre-inclusão das classes mais vulneráveis e concentrando a sinalização de risco nas famílias com maior probabilidade de renda acima do limite de ½ salário mínimo. A manutenção da variável classe_renda mostrou-se fundamental para validar a coerência interna do modelo e reforçar sua utilidade como ferramenta técnica de apoio à gestão, permitindo transparência, rastreabilidade e interpretação substantiva dos resultados.
 
+## Comparação com o modelo usando variáveis do IVCAD
+
+Dado o extenso trabalho de engenharia das variáveis diretas do Cadastro Único, foi avaliado se o Índice de Vulnerabilidade do Cadastro Único (IVCAD) — índice multidimensional já disponível — poderia cumprir função semelhante de triagem a menor custo. Foram treinados dois modelos adicionais com o mesmo objetivo e metodologia: um apenas com as variáveis do IVCAD (IVCAD puro) e outro combinando o IVCAD às variáveis individuais do responsável familiar (IVCAD+RF). Em todos os casos foram mapeadas e removidas as variáveis do IVCAD com informação direta de renda, para evitar vazamento de informação.
+
+O modelo com variáveis diretas do Cadastro Único superou ambas as alternativas em todas as métricas:
+
+| Modelo | PR-AUC | ROC-AUC | Famílias sinalizadas (thr 0,80) | Taxa de convocação |
+| ------ | ------ | ------- | -------------------------------- | ------------------ |
+| CadÚnico (completo) | 0,846 | 0,826 | 40.277 | 22,6% |
+| IVCAD + RF | 0,807 | 0,813 | 26.900 | 15,1% |
+| IVCAD puro | 0,774 | 0,785 | 21.866 | 12,6% |
+
+A precisão é equivalente nos três (~0,89), de modo que a diferença operacionalmente relevante está na **cobertura**, e não na taxa de falsos positivos: o IVCAD puro deixa de sinalizar cerca de 46% das famílias que o modelo completo capturaria. A inclusão do perfil individual do responsável familiar (IVCAD+RF) recupera parte expressiva dessa lacuna (+5.034 famílias frente ao IVCAD puro), confirmando que a ausência de variáveis individuais — escolaridade, ocupação e tipo de trabalho principal — é uma das causas centrais da diferença de desempenho. A lacuna residual decorre da ausência dos indicadores de composição etária da família e das condições do domicílio em sua forma original, que o IVCAD resume em marcadores binários de privação.
+
+Esses resultados não invalidam o IVCAD, concebido como instrumento de diagnóstico multidimensional da vulnerabilidade, mas evidenciam os limites de seu uso para classificação de renda específica. Sugerem, ainda, três direções de aperfeiçoamento do índice para esse fim: indicadores mais granulares na dimensão Trabalho e Qualificação de Adultos (distinguindo o tipo de vínculo); inclusão do perfil individual do responsável familiar; e uma referência territorial intermediária (UF ou região).
+
 ## Organização do ML em pipeline e salvamento
 
-Para garantir a reprodutibilidade, a consistência dos resultados e a facilidade de uso do modelo ao longo do tempo, todo o fluxo de preparação dos dados e classificação foi encapsulado em um único pipeline de Machine Learning. 
+A engenharia de variáveis é realizada integralmente no script SQL de geração da base: limpeza dos valores ausentes segundo as regras do Cadastro Único e condensação das informações do nível de pessoa para o nível de família. Assim, a base chega ao ambiente de modelagem pronta e sem valores ausentes, e o mesmo script é utilizado para gerar a base de aplicação às famílias com renda informal, garantindo que treinamento e aplicação compartilhem exatamente o mesmo processamento.
 
-Esse pipeline integra o pré-processamento das variáveis (imputação de valores ausentes, normalização, codificação de variáveis categóricas e preservação de variáveis percentuais, booleanas e geográficas) com o modelo final de classificação binária, incluindo explicitamente a regra operacional de decisão baseada em threshold de probabilidade. 
+O pipeline de Machine Learning encapsula, portanto, apenas o pré-processamento estatístico (normalização Min–Max das variáveis quantitativas contínuas, codificação one-hot das categóricas multicategóricas e preservação das percentuais, booleanas, binárias e geográficas) e o modelo final de classificação binária, incluindo explicitamente a regra operacional de decisão baseada em threshold de probabilidade. Como a base já é entregue sem ausências, o pipeline não incorpora etapas de imputação.
 
-Após o treinamento, o pipeline completo é salvo em disco como um único artefato, garantindo que futuras aplicações utilizem exatamente as mesmas transformações e parâmetros empregados no desenvolvimento do modelo. 
+Após o treinamento, o pipeline completo é salvo em disco como um único artefato, assegurando que futuras aplicações utilizem exatamente as mesmas transformações e parâmetros. Adicionalmente, são gerados metadados estruturados com data de treinamento, tamanho das bases, variáveis utilizadas e limiar de decisão adotado, garantindo transparência, rastreabilidade e reutilização do modelo.
 
-Adicionalmente, são gerados metadados em formato estruturado contendo informações sobre data de treinamento, tamanho das bases, variáveis utilizadas e limiar de decisão adotado, assegurando transparência, rastreabilidade e facilitando a reutilização do modelo em análises futuras ou em contextos operacionais.
+## Uso ético de inteligência artificial
+
+O modelo foi concebido como instrumento auxiliar de triagem, e não como mecanismo autônomo de decisão. Suas saídas não produzem efeitos administrativos diretos: sinalizam casos a serem encaminhados às gestões locais para verificação, cabendo aos servidores confirmar ou refutar as indicações antes de qualquer repercussão cadastral. Esse arranjo alinha-se ao conceito de inteligência assistida e às exigências de supervisão humana, explicabilidade e mitigação de riscos previstas para sistemas de alto risco no guia de IA Generativa no Serviço Público e no Plano Brasileiro de Inteligência Artificial.
+
+A mitigação de vieses também orientou as escolhas metodológicas. Como os erros de classificação em modelos de focalização tendem a se concentrar nos grupos mais pobres — risco frequentemente subestimado pela acurácia global —, o limiar operacional foi definido para reduzir falsos positivos entre famílias vulneráveis: no threshold de 0,80, apenas 2,9% das famílias em situação de pobreza são sinalizadas, com precisão zero nesse estrato, indicando que o modelo não gera risco operacional para esse segmento. O uso da base completa do Cadastro Único como fonte de treinamento reforça a representatividade da amostra, e a responsabilidade pela decisão administrativa permanece integralmente com os gestores locais.
 
 ## Conclusão
 
@@ -509,38 +525,37 @@ Como próximo passo, o modelo poderá ser aplicado às famílias sem renda forma
 
 Os resultados obtidos mostram-se coerentes com a literatura especializada sobre focalização de políticas sociais e uso de aprendizado de máquina para diagnóstico de pobreza, reforçando a adequação metodológica das escolhas realizadas e o potencial do modelo como instrumento de apoio à gestão pública.
 
-## Aplicação do ML
-
-Para simular a aplicação do modelo, foi gerada uma base amostral de 1 milhão de famílias sem renda formal observada, proporcional à distribuição de famílias por município, com o objetivo de avaliar o comportamento do modelo em um cenário operacional realista.
-
-O modelo foi aplicado conforme descrito no notebook aplicacao_ML.ipynb. Como resultado, foi inicialmente gerado um arquivo intermediário com os scores do modelo para todas as famílias da amostra. Em seguida, esses resultados foram combinados com a renda declarada no Cadastro Único, de modo que apenas famílias que declararam renda per capita inferior ou igual a R$ 759, mas cujo perfil socioeconômico foi classificado pelo modelo como compatível com renda superior a esse limiar, fossem priorizadas para averiguação cadastral.
-
-O arquivo final gerado, familias_para_averiguacao_cadastral.csv, contém apenas as famílias elegíveis à etapa de qualificação cadastral, identificadas por código anonimizado.
-
-As colunas do arquivo final são:
-
-| Coluna                  | Descrição                                                                                                                                                                                                                                                                                        | Tipo / Valores                           |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| **ID_FAM_ANON**         | Identificador anonimizado da família (Responsável Familiar). Gerado exclusivamente para fins analíticos, sem possibilidade de reidentificação.                                                                                                                                                   | Inteiro                                  |
-| **VL_RENDA_MEDIA_FAM**  | Valor da renda média familiar declarada no Cadastro Único no momento do cadastro. Utilizada em conjunto com o resultado do modelo para definição do público elegível à averiguação cadastral.                                                                                                    | Numérico (R$)                            |
-| **CO_MUNIC_IBGE_2_FAM** | Código IBGE da Unidade da Federação (UF) de residência da família (2 dígitos).                                                                                                                                                                                                                   | Categórico (UF)                          |
-| **CO_MUNIC_IBGE_5_FAM** | Código IBGE do município de residência da família (5 dígitos), permitindo análises territoriais detalhadas.                                                                                                                                                                                      | Categórico (Município)                   |
-| **PROB_RENDA_INFORMAL** | Probabilidade estimada pelo modelo de que o perfil socioeconômico da família seja compatível com níveis de renda superiores aos declarados no Cadastro Único, com base em padrões aprendidos a partir de famílias com renda formal observada no CNIS. Valor contínuo entre 0 e 1.                | Numérico (0–1)                           |
-| **PRED_RENDA_INFORMAL** | Classificação do modelo a partir da aplicação de um *threshold* conservador (0,80) sobre a probabilidade estimada. O valor 1 indica que a família apresenta perfil compatível com renda superior ao limiar normativo, sendo elegível à averiguação cadastral quando combinada à renda declarada. | Binário (0 = não indicado, 1 = indicado) |
-
-
 ## Referências bibliográficas 
 
-ALTMAN, M.; ARDINGTON, C.; WEGNER, E.; ZANZIBAR, N. A new era in poverty diagnostics: experiential knowledge from machine learning to improve the efficiency of social programs in combating poverty. Washington, DC: World Bank, 2025.
+O levantamento bibliográfico contou com apoio de um modelo de linguagem (Claude Sonnet 4.6, Anthropic) para ampliar o vocabulário de busca e localizar publicações relevantes; todas as referências foram posteriormente verificadas e selecionadas manualmente.
 
-ELBERS, C.; LANJOUW, J. O.; LANJOUW, P. Imputing poverty: a review of methods and applications. Journal of Economic Inequality, v. 1, n. 2, p. 161–189, 2003.
+As referências completas, em formato ABNT, encontram-se no artigo do projeto. A seguir, as principais fontes que embasaram as escolhas metodológicas, organizadas por tema.
 
-ELBERS, C.; FUJII, T.; Lanjouw, P.; ÖZLER, B.; YIN, W. Poverty alleviation through geographic targeting: how much does disaggregation help? Journal of Development Economics, v. 83, n. 1, p. 198–213, 2007.
+**Machine learning para predição de pobreza e focalização**
+- Linhares et al. (2026) — *A new era in poverty diagnostics.* [DOI](https://doi.org/10.1016/j.ject.2025.05.002)
+- Corral, Henderson & Segovia (2025) — *Poverty mapping in the age of machine learning.* [DOI](https://doi.org/10.1016/j.jdeveco.2024.103377)
+- Verme (2025) — *Predicting poverty.* World Bank Economic Review. [DOI](https://doi.org/10.1093/wber/lhae044)
+- Altindağ et al. (2021) — *Targeting humanitarian aid using administrative data.* [DOI](https://doi.org/10.1016/j.jdeveco.2020.102564)
+- McBride & Nichols (2016) — *Retooling poverty targeting using machine learning.* World Bank. [DOI](https://doi.org/10.1596/33525)
+- Wobcke & Mariyah (2023) — *ML and data augmentation in the proxy means test.* [DOI](https://doi.org/10.3233/SJI-230033)
+- Herrera et al. (2023) — *ICTs and income distribution in Brazil: a SHAP explanation.* [DOI](https://doi.org/10.1016/j.telpol.2023.102598)
 
-HARTWIG, F.; SCHRÖDER, C.; SCHULZ, B. Machine learning with administrative data for energy poverty identification in the UK. Energy Policy, v. 185, 2025.
+**Cadastro Único, renda informal e contexto brasileiro**
+- Mostafa & Santos (2016) — *Limitações de um teste de meios via predição de renda.* Ipea. [link](http://repositorio.ipea.gov.br/handle/11058/7234)
+- Costa, Santos & Ferreira (2025) — *O IVCAD no MDS.* Caderno de Estudos n. 39. [link](https://aplicacoes.mds.gov.br/sagicad/pesquisas/documentos/estudo_pesquisa/estudo_pesquisa_326.pdf)
+- Engbom et al. (2022) — *Earnings inequality and dynamics in the presence of informality: Brazil.* [DOI](https://doi.org/10.3982/QE1855)
+- Direito, Licio & Curralero (2024) — *Cadastro Único e a crise da maior idade.* Ipea TD n. 2989. [DOI](http://dx.doi.org/10.38116/td2989-port)
+- Dietrich, Malerba & Gassmann (2024) — *Predicting social assistance beneficiaries: the welfare damage of data biases.* [DOI](https://doi.org/10.1017/dap.2023.38)
 
-INSTITUTO DE PESQUISA ECONÔMICA APLICADA (IPEA). Limitações de um teste de meios via predição de renda no contexto brasileiro. Brasília: IPEA, 2019.
+**Uso ético e governança de IA no setor público**
+- Brasil/MCTI (2025) — *Plano Brasileiro de Inteligência Artificial (PBIA).* [link](https://www.gov.br/mcti/pt-br/centrais-de-conteudo/publicacoes-mcti/plano-brasileiro-de-inteligencia-artificial/pbia_mcti_2025.pdf)
+- Brasil/MGI–SERPRO (2025) — *IA Generativa no Serviço Público: definições, usos e boas práticas.* [link](https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1/ia-generativa-no-servico-publico.pdf)
+- Denis et al. (2021) — *Uso responsável da IA para políticas públicas.* BID. [DOI](https://doi.org/10.18235/0003631)
+- Transparência Brasil (2020) — *Recomendações de governança: uso de IA pelo poder público.* [link](https://transparencia.org.br)
+- ONU (2019) — *Digital technology, social protection and human rights.* [link](https://www.ohchr.org/en/calls-for-input/digital-technology-social-protection-and-human-rights-report)
+- Harari (2024) — *Nexus: uma breve história das redes de informação.* Companhia das Letras.
 
-ORGANISATION FOR ECONOMIC CO-OPERATION AND DEVELOPMENT (OECD). Modernising access to social protection: strategies, technologies and data advances in OECD countries. Paris: OECD Publishing, 2018.
-
-RAVALLION, M. Retooling poverty targeting using a capability approach. World Bank Research Observer, v. 31, n. 2, p. 263–292, 2016.
+**Marco normativo do Cadastro Único**
+- Brasil (2022) — Decreto nº 11.016/2022 (regulamenta o Cadastro Único). [link](https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2022/decreto/d11016.htm)
+- Brasil/MDS (2023) — Instrução Normativa nº 1/SAGICAD (integração Cadastro Único–CNIS). [link](https://www.gov.br/mds/pt-br/acesso-a-informacao/legislacao/instrucoes/instrucao-normativa-no-1-sagicad-mds-de-02-de-junho-de-2023)
+- Brasil/MDS (2022) — *Manual do entrevistador do Cadastro Único*, 5. ed. [link](https://ead.mds.gov.br/system/file/get/735300xjwf5bld578gd9/Manual%20do%20Entrevistador%205ed%20-%20Livro%20Consolidado%20-%201008.pdf)
