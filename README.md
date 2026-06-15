@@ -136,6 +136,8 @@ As características socioeconômicas individuais — relacionadas à escolaridad
 
 O recorte adotado permite que o modelo aprenda padrões socioeconômicos associados à presença de renda formal observada no CNIS, sendo posteriormente aplicado para estimar a probabilidade de inconsistência entre a renda declarada e a renda provável de famílias sem renda formal captada, com o objetivo de apoiar a priorização de ações de qualificação cadastral.
 
+Os dados foram acessados via DBeaver com conexão ao banco Teradata, exclusivamente por VPN institucional, sem extração local de dados identificados. Um script SQL gerou a base já anonimizada, aplicando as limpezas e a condensação ao nível familiar. O acesso seguiu o protocolo recomendado (Portal gov.br) e o respectivo Termo de Compromisso de Manutenção de Sigilo, em conformidade com a LGPD. Cabe destacar que, embora o povoamento do CNIS atualize também rendas de aposentadoria e BPC, apenas a origem vinculada à renda do trabalho foi utilizada como critério de seleção: a inclusão de aposentadorias elevaria a proporção de famílias com idosos, criando o risco de o modelo aprender padrões associados à presença de idosos, e não às demais características socioeconômicas de interesse.
+
 ## Preparação da base
 
 Tanto na **Base famílias**, quanto na **Base pessoas** existe um número considerável de valores vazios considerando as regras de preenchimento do formulário do Cadastro Único. Assim, foi necessário olhar para as regras de preenchimento do formulário, com base no Manual do Entrevistador do Cadastro Único, de modo a identificar os valores vazios pelo fato de não serem de preenchimento obrigatório.
@@ -222,6 +224,8 @@ Além disso, a exclusão de variáveis diretamente associadas à concessão de b
 
 ## Variáveis utilizadas no ML
 
+Para o treinamento foi utilizada uma amostra de aproximadamente 1 milhão de famílias, construída de forma proporcional à distribuição real das classes de renda (≈41,5% até ½ SM e 58,5% acima). Amostras artificialmente balanceadas foram testadas, mas apresentaram desempenho inferior, com menor estabilidade e calibração. Avaliou-se ainda uma estratificação pela composição familiar — motivada pela diferença entre o Cadastro Único (25,1% de casais; 40,9% de responsáveis do sexo feminino sem cônjuge) e os Censos do IBGE —, mas a imposição de proporções fixas degradou o desempenho e foi descartada, ficando o tema indicado para investigações futuras.
+
 **Variável alvo**: variável binária construída a partir da renda domiciliar per capita formal observada no CNIS, sendo definida como 1 quando o valor é superior a R$ 759 (½ salário mínimo) e 0 caso contrário.
 
 Durante o treinamento, essa variável representa a classe real de renda formalmente observada. Na aplicação do modelo a famílias sem renda formal registrada, o valor previsto de y_bin deve ser interpretado como a probabilidade de a renda efetivamente auferida pela família ser superior à renda declarada no Cadastro Único, e não como uma medida direta de renda.
@@ -255,7 +259,7 @@ A identificação de colinearidade entre variáveis categóricas é particularme
 
 Dessa forma, a utilização do Cramér’s V permitiu orientar decisões de seleção e agrupamento de variáveis categóricas, contribuindo para a construção de um conjunto de atributos mais parcimonioso, interpretável e alinhado aos objetivos do modelo de triagem de inconsistências de renda.
 
-<img width="865" height="796" alt="{CF210463-4C24-4725-B362-78D8F403637F}" src="https://github.com/user-attachments/assets/581cc4c6-0111-490c-bc7d-1747618b4cdc" />
+
 
 
 
@@ -266,19 +270,11 @@ Considerando que as variáveis abaixo apresentaram limiar de associação acima 
 
 ## Pré-processamento das variáveis
 
-Antes do treinamento dos modelos de aprendizado de máquina, foi realizada uma etapa estruturada de pré-processamento das variáveis, com o objetivo de garantir consistência estatística, reduzir vieses decorrentes de escalas distintas e tornar os dados adequados aos algoritmos utilizados. 
+A base analítica é carregada já pronta a partir do script SQL, que realiza toda a engenharia de variáveis — limpeza dos valores ausentes conforme as regras de preenchimento do Cadastro Único (preenchimento lógico com o código **-1** para "não se aplica" e exclusão das linhas com ausentes remanescentes) e condensação das informações do nível de pessoa para o nível de família. **Não é aplicada imputação de valores ausentes em nenhuma etapa**: a base chega ao ambiente de modelagem completa e sem valores nulos.
 
-As variáveis foram previamente classificadas conforme sua natureza — quantitativas contínuas, percentuais, categóricas binárias, categóricas multicategóricas, booleanas e geográficas — permitindo a aplicação de transformações específicas a cada grupo. 
+No ambiente de modelagem, aplica-se apenas um pré-processamento estatístico leve, necessário para adequar as escalas das variáveis aos algoritmos. As variáveis quantitativas contínuas são normalizadas por escalonamento Min–Max, assegurando comparabilidade entre atributos com diferentes ordens de grandeza, e as categóricas multicategóricas são codificadas via one-hot encoding, preservando a informação sem impor ordens artificiais entre categorias. As variáveis percentuais e booleanas, por já se encontrarem em escalas compatíveis, as binárias e as geográficas — estas últimas para evitar a criação excessiva de colunas — são mantidas em sua forma original (passthrough).
 
-Variáveis quantitativas contínuas tiveram valores ausentes imputados pela mediana e foram normalizadas por meio do escalonamento Min–Max, assegurando comparabilidade entre atributos com diferentes ordens de grandeza. 
-
-Variáveis categóricas multicategóricas foram tratadas com imputação pela moda e codificadas via one-hot encoding, preservando informação sem impor ordens artificiais entre categorias, enquanto variáveis categóricas binárias receberam apenas imputação da categoria mais frequente. 
-
-Variáveis percentuais e booleanas, por já se encontrarem em escalas compatíveis, foram mantidas sem transformação adicional. 
-
-Por fim, variáveis geográficas foram preservadas em sua forma original, evitando a criação excessiva de colunas decorrente da codificação one-hot de identificadores territoriais. 
-
-Esse processo de pré-processamento foi encapsulado em um ColumnTransformer, assegurando reprodutibilidade, coerência entre treino e aplicação do modelo e alinhamento metodológico com o uso de dados administrativos complexos, como os do Cadastro Único.
+Esse pré-processamento é encapsulado em um ColumnTransformer, assegurando reprodutibilidade e coerência entre as fases de treinamento e aplicação do modelo.
 
 ## Treinamento e comparação de modelos de classificação
 
@@ -328,11 +324,11 @@ Com o limiar de decisão ajustado para 0,80, o modelo foi configurado para atuar
 
 | Métrica                     | Valor      |
 | --------------------------- | ---------- |
-| Acurácia                    | **0.6309** |
-| Precisão (classe positiva)  | **0.8884** |
-| Revocação (classe positiva) | **0.3751** |
-| F1-score (classe positiva)  | **0.5275** |
-| Taxa de convocação          | **23,19%** |
+| Acurácia                    | **0.6204** |
+| Precisão (classe positiva)  | **0.8925** |
+| Revocação (classe positiva) | **0.3615** |
+| F1-score (classe positiva)  | **0.5146** |
+| Taxa de convocação          | **22,56%** |
 
 A elevada precisão indica que a maior parte das famílias sinalizadas pelo modelo apresenta, de fato, maior risco de inconsistência de renda, enquanto a taxa de convocação moderada assegura que o modelo possa ser utilizado como apoio à priorização de ações de qualificação cadastral, sem gerar sobrecarga excessiva aos municípios.
 
@@ -345,9 +341,9 @@ Ressalta-se, contudo, que o limiar de decisão para convocação é um parâmetr
 
 A matriz de confusão evidencia o comportamento do modelo no regime de triagem com threshold = 0,80. 
 
-Observa-se que a maior parte das famílias classificadas como “> ½ salário mínimo” corresponde de fato a casos positivos (41.203 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (5.175), refletindo a alta precisão do modelo. 
+Observa-se que a maior parte das famílias classificadas como "> ½ salário mínimo" corresponde de fato a casos positivos (40.277 verdadeiros positivos), enquanto o número de falsos positivos é relativamente reduzido (4.851), refletindo a alta precisão do modelo. 
 
-Por outro lado, há um volume expressivo de falsos negativos (68.653), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado. 
+Por outro lado, há um volume expressivo de falsos negativos (71.140), ou seja, famílias acima de ½ salário mínimo que não foram sinalizadas, o que é esperado dado o limiar conservador adotado.
 
 Esse padrão confirma que o modelo foi intencionalmente calibrado para priorizar a confiabilidade dos casos convocados, reduzindo o risco de sobrecarga operacional nos municípios, ainda que isso implique menor sensibilidade na detecção de todos os casos potenciais.
 
@@ -487,15 +483,35 @@ Esse comportamento confirma que o modelo opera como um instrumento de priorizaç
 
 Em conjunto, os resultados indicam que o modelo é bem calibrado para diferenciar os perfis de renda, mantendo baixo risco de sobre-inclusão das classes mais vulneráveis e concentrando a sinalização de risco nas famílias com maior probabilidade de renda acima do limite de ½ salário mínimo. A manutenção da variável classe_renda mostrou-se fundamental para validar a coerência interna do modelo e reforçar sua utilidade como ferramenta técnica de apoio à gestão, permitindo transparência, rastreabilidade e interpretação substantiva dos resultados.
 
+## Comparação com o modelo usando variáveis do IVCAD
+
+Dado o extenso trabalho de engenharia das variáveis diretas do Cadastro Único, foi avaliado se o Índice de Vulnerabilidade do Cadastro Único (IVCAD) — índice multidimensional já disponível — poderia cumprir função semelhante de triagem a menor custo. Foram treinados dois modelos adicionais com o mesmo objetivo e metodologia: um apenas com as variáveis do IVCAD (IVCAD puro) e outro combinando o IVCAD às variáveis individuais do responsável familiar (IVCAD+RF). Em todos os casos foram mapeadas e removidas as variáveis do IVCAD com informação direta de renda, para evitar vazamento de informação.
+
+O modelo com variáveis diretas do Cadastro Único superou ambas as alternativas em todas as métricas:
+
+| Modelo | PR-AUC | ROC-AUC | Famílias sinalizadas (thr 0,80) | Taxa de convocação |
+| ------ | ------ | ------- | -------------------------------- | ------------------ |
+| CadÚnico (completo) | 0,846 | 0,826 | 40.277 | 22,6% |
+| IVCAD + RF | 0,807 | 0,813 | 26.900 | 15,1% |
+| IVCAD puro | 0,774 | 0,785 | 21.866 | 12,6% |
+
+A precisão é equivalente nos três (~0,89), de modo que a diferença operacionalmente relevante está na **cobertura**, e não na taxa de falsos positivos: o IVCAD puro deixa de sinalizar cerca de 46% das famílias que o modelo completo capturaria. A inclusão do perfil individual do responsável familiar (IVCAD+RF) recupera parte expressiva dessa lacuna (+5.034 famílias frente ao IVCAD puro), confirmando que a ausência de variáveis individuais — escolaridade, ocupação e tipo de trabalho principal — é uma das causas centrais da diferença de desempenho. A lacuna residual decorre da ausência dos indicadores de composição etária da família e das condições do domicílio em sua forma original, que o IVCAD resume em marcadores binários de privação.
+
+Esses resultados não invalidam o IVCAD, concebido como instrumento de diagnóstico multidimensional da vulnerabilidade, mas evidenciam os limites de seu uso para classificação de renda específica. Sugerem, ainda, três direções de aperfeiçoamento do índice para esse fim: indicadores mais granulares na dimensão Trabalho e Qualificação de Adultos (distinguindo o tipo de vínculo); inclusão do perfil individual do responsável familiar; e uma referência territorial intermediária (UF ou região).
+
 ## Organização do ML em pipeline e salvamento
 
-Para garantir a reprodutibilidade, a consistência dos resultados e a facilidade de uso do modelo ao longo do tempo, todo o fluxo de preparação dos dados e classificação foi encapsulado em um único pipeline de Machine Learning. 
+A engenharia de variáveis é realizada integralmente no script SQL de geração da base: limpeza dos valores ausentes segundo as regras do Cadastro Único e condensação das informações do nível de pessoa para o nível de família. Assim, a base chega ao ambiente de modelagem pronta e sem valores ausentes, e o mesmo script é utilizado para gerar a base de aplicação às famílias com renda informal, garantindo que treinamento e aplicação compartilhem exatamente o mesmo processamento.
 
-Esse pipeline integra o pré-processamento das variáveis (imputação de valores ausentes, normalização, codificação de variáveis categóricas e preservação de variáveis percentuais, booleanas e geográficas) com o modelo final de classificação binária, incluindo explicitamente a regra operacional de decisão baseada em threshold de probabilidade. 
+O pipeline de Machine Learning encapsula, portanto, apenas o pré-processamento estatístico (normalização Min–Max das variáveis quantitativas contínuas, codificação one-hot das categóricas multicategóricas e preservação das percentuais, booleanas, binárias e geográficas) e o modelo final de classificação binária, incluindo explicitamente a regra operacional de decisão baseada em threshold de probabilidade. Como a base já é entregue sem ausências, o pipeline não incorpora etapas de imputação.
 
-Após o treinamento, o pipeline completo é salvo em disco como um único artefato, garantindo que futuras aplicações utilizem exatamente as mesmas transformações e parâmetros empregados no desenvolvimento do modelo. 
+Após o treinamento, o pipeline completo é salvo em disco como um único artefato, assegurando que futuras aplicações utilizem exatamente as mesmas transformações e parâmetros. Adicionalmente, são gerados metadados estruturados com data de treinamento, tamanho das bases, variáveis utilizadas e limiar de decisão adotado, garantindo transparência, rastreabilidade e reutilização do modelo.
 
-Adicionalmente, são gerados metadados em formato estruturado contendo informações sobre data de treinamento, tamanho das bases, variáveis utilizadas e limiar de decisão adotado, assegurando transparência, rastreabilidade e facilitando a reutilização do modelo em análises futuras ou em contextos operacionais.
+## Uso ético de inteligência artificial
+
+O modelo foi concebido como instrumento auxiliar de triagem, e não como mecanismo autônomo de decisão. Suas saídas não produzem efeitos administrativos diretos: sinalizam casos a serem encaminhados às gestões locais para verificação, cabendo aos servidores confirmar ou refutar as indicações antes de qualquer repercussão cadastral. Esse arranjo alinha-se ao conceito de inteligência assistida e às exigências de supervisão humana, explicabilidade e mitigação de riscos previstas para sistemas de alto risco no guia de IA Generativa no Serviço Público e no Plano Brasileiro de Inteligência Artificial.
+
+A mitigação de vieses também orientou as escolhas metodológicas. Como os erros de classificação em modelos de focalização tendem a se concentrar nos grupos mais pobres — risco frequentemente subestimado pela acurácia global —, o limiar operacional foi definido para reduzir falsos positivos entre famílias vulneráveis: no threshold de 0,80, apenas 2,9% das famílias em situação de pobreza são sinalizadas, com precisão zero nesse estrato, indicando que o modelo não gera risco operacional para esse segmento. O uso da base completa do Cadastro Único como fonte de treinamento reforça a representatividade da amostra, e a responsabilidade pela decisão administrativa permanece integralmente com os gestores locais.
 
 ## Conclusão
 
@@ -530,6 +546,8 @@ As colunas do arquivo final são:
 
 
 ## Referências bibliográficas 
+
+O levantamento bibliográfico contou com apoio de um modelo de linguagem (Claude Sonnet 4.6, Anthropic) para ampliar o vocabulário de busca e localizar publicações relevantes; todas as referências foram posteriormente verificadas e selecionadas manualmente.
 
 ALTMAN, M.; ARDINGTON, C.; WEGNER, E.; ZANZIBAR, N. A new era in poverty diagnostics: experiential knowledge from machine learning to improve the efficiency of social programs in combating poverty. Washington, DC: World Bank, 2025.
 
