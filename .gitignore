@@ -6,7 +6,9 @@ df_bal.csv
 df_prop.csv
 df_bal_binario.csv
 df_prop_binario.csv
+df_prop_binario_comp_fam.csv
 fam_pes_cad_11_25_amostra_aplicacao.csv
+familias_para_averiguacao_cadastral.csv
 analise_ivcad/
 analise_ivcad_rf/
 fam_pes_cad_11_25_resultado_ml.csv
