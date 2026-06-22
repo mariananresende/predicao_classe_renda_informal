@@ -417,15 +417,19 @@ O gráfico mostra uma relação clara entre a composição etária da família e
 
 ### Detalhamento - CO_AFASTADO_TRAB_MEMB
 
+<img width="946" height="353" alt="image" src="https://github.com/user-attachments/assets/66991383-a0f2-45f1-b0b3-c269c359add4" />
+
 <img width="742" height="361" alt="image" src="https://github.com/user-attachments/assets/e8a85215-81a5-46d1-9b7e-eae8248af0a5" />
 
-O gráfico indica que a variável CO_AFASTADO_TRAB_MEMB, associada ao responsável familiar, apresenta diferença pouco acentuada na distribuição das classes de renda. Tanto entre responsáveis afastados do trabalho (1 – SIM) quanto entre aqueles não afastados (2 – NÃO), as proporções de famílias com renda ≤ ½ salário mínimo e > ½ salário mínimo permanecem muito próximas, em torno de 50%. Isso sugere que, isoladamente, o afastamento do trabalho do responsável familiar não é um fator fortemente discriminante da renda per capita no modelo, mas atua de forma complementar quando combinado com outras características de trabalho, escolaridade, composição familiar e condições do domicílio.
+Este outro gráfico traz a análise da variável “Marcação se o responsável familiar estava afastado do trabalho na semana passada”. A variável apresenta poder discriminatório concentrado no grupo -1, que reúne RFs que trabalharam na semana anterior e para os quais a questão não se aplica. Com 58,7% na Classe 1, é o grupo com maior proporção acima de ½ SM, resultado coerente com a inserção ativa no mercado de trabalho. Os grupos Não e Sim apresentam distribuições praticamente idênticas e próximas ao equilíbrio, confirmando que a variável tem poder discriminatório limitado entre RFs, ou seja, seu papel na classificação é mediado principalmente pelo contraste com quem efetivamente trabalhou na semana.
 
 ### Detalhamento - CO_CURSO_FREQ_PESSOA_MEMB
 
+<img width="946" height="353" alt="image" src="https://github.com/user-attachments/assets/354d3bd9-a2ee-4b4c-8ac8-2674cb7f5252" />
+
 <img width="994" height="360" alt="image" src="https://github.com/user-attachments/assets/76b6e260-02ca-4a48-a13d-638b83e89ff6" />
 
-O gráfico mostra uma clara relação entre o nível de escolaridade do responsável familiar e a renda domiciliar per capita. Observa-se que categorias associadas a menor escolarização — como alfabetização para adultos, ensino fundamental e EJA — concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, à medida que aumenta o nível educacional do responsável, especialmente nos grupos de ensino  pré-vestibular e ensino superior/pós-graduação, cresce de forma consistente a participação das famílias com renda acima de ½ salário mínimo. Esse padrão reforça o papel central da escolaridade do responsável familiar como proxy de inserção produtiva e capacidade de geração de renda, explicando sua elevada contribuição para a classificação realizada pelo modelo.
+A variável representa o curso mais elevado já frequentado pelo responsável familiar. Em volume, a base é fortemente concentrada em Ensino Médio / 2º grau, seguido de Ensino Fundamental 5ª–8ª séries, Ensino Fundamental 1ª–4ª séries e Superior/Pós/Mestrado/Doutorado. As demais categorias têm volumes reduzidos, o que exige cautela na interpretação de suas proporções. O grupo -1 reúne RFs que nunca frequentaram escola, para os quais a pergunta sobre curso mais elevado não se aplica, e concentra 62,1% na Classe 1, resultado que merece cautela interpretativa. A partir do ensino fundamental, o padrão segue o gradiente esperado nas categorias de maior volume: Ensino Fundamental 5ª–8ª séries concentra-se na Classe 0, enquanto Ensino Médio / 2º grau e Médio EJA Supletivo apresentam maioria acima de ½ SM. O destaque vai para Superior/Pós/Mestrado/Doutorado, com 77,9% na Classe 1, o sinal mais intenso entre as categorias relevantes, confirmando a relação positiva e consistente entre escolaridade e renda no CadÚnico.
 
 ### Detalhamento - PCT_1_INFANCIA
 
@@ -433,11 +437,79 @@ O gráfico mostra uma clara relação entre o nível de escolaridade do respons�
 
 O gráfico evidencia uma associação inversa entre a presença de crianças na primeira infância e a renda per capita familiar. À medida que aumenta o percentual de crianças pequenas no domicílio, cresce a proporção de famílias classificadas com renda ≤ ½ salário mínimo, enquanto diminui de forma acentuada a participação das famílias com renda acima de ½ salário mínimo. Esse comportamento é consistente com a literatura socioeconômica, pois domicílios com maior presença de crianças muito pequenas tendem a enfrentar maiores restrições à inserção produtiva dos adultos e maior pressão sobre a renda, o que explica a relevância dessa variável na capacidade do modelo em sinalizar potenciais inconsistências de renda.
 
+### Detalhamento - PCT_ADOLESCENTES_12A18
+
+<img width="914" height="340" alt="image" src="https://github.com/user-attachments/assets/2e1efbbf-7278-4dd1-af62-10cf9c398ef4" />
+
+Famílias sem adolescentes de 12 a 18 anos, proporção zero, apresentam distribuição próxima ao equilíbrio entre as classes, com leve maioria acima de ½ SM. À medida que a proporção de adolescentes cresce, a Classe 0 passa a dominar progressivamente, atingindo ~78% nas famílias compostas majoritariamente por adolescentes. O padrão reflete o efeito do denominador per capita, mais adolescentes sem renda própria reduzem a renda per capita familiar, mas com intensidade menor que o observado para crianças na primeira infância.
+
+### Detalhamento - PCT_IDOSOS_BPC
+
+<img width="939" height="348" alt="image" src="https://github.com/user-attachments/assets/db51b00f-80ff-439b-afda-89650aa58236" />
+
+<img width="736" height="346" alt="image" src="https://github.com/user-attachments/assets/3e7dee47-a0e4-4060-b7b8-4c55832e4683" />
+
+A presença de idosos a partir de 65 anos, elegíveis ao BPC, é um dos sinais mais intensos identificados na análise. Famílias sem idosos nessa faixa etária, que representam a grande maioria da base, distribuem-se próximo ao equilíbrio com leve maioria acima de ½ SM (55,2% Cl.1). Já famílias com ao menos um idoso BPC concentram 96,2% na Classe 1, o sinal mais expressivo de toda a análise, refletindo o efeito da renda previdenciária do BPC como âncora de renda estável e formal no domicílio, que eleva a renda per capita de forma consistente independentemente da composição familiar.
+
+### Detalhamento - PCT_CRIANCAS_7A11
+
+<img width="886" height="336" alt="image" src="https://github.com/user-attachments/assets/ae5451e2-a6a4-4454-99a3-74a85153d3ed" />
+
+Famílias sem crianças de 7 a 11 anos apresentam distribuição próxima ao equilíbrio com leve maioria acima de ½ SM, enquanto à medida que a proporção dessas crianças cresce, a Classe 0 passa a dominar progressivamente, atingindo ~80% nas famílias compostas majoritariamente por crianças nessa faixa. O efeito reflete o impacto do denominador per capita, mais crianças sem renda própria reduzem a renda per capita familiar, com intensidade similar à observada para adolescentes, mas inferior à das crianças na primeira infância.
+
+
 ### Detalhamento - CO_PRINCIPAL_TRAB_MEMB
+
+<img width="1010" height="369" alt="image" src="https://github.com/user-attachments/assets/c0d849a4-df09-4d82-a3c9-f21e10e2fe04" />
+
 
 <img width="736" height="352" alt="image" src="https://github.com/user-attachments/assets/1413170a-aa16-41b5-9239-e9152163eea8" />
 
-O gráfico evidencia que a condição de trabalho do responsável familiar está fortemente associada ao perfil de renda das famílias. Situações mais precárias ou instáveis de inserção no mercado de trabalho, como conta própria/bico, trabalho temporário em área rural, trabalho doméstico sem carteira e condição de não remunerado, concentram maior proporção de famílias com renda ≤ ½ salário mínimo. Em contraste, vínculos mais formais e estáveis, como empregado e doméstico com carteira, militar/servidor público e, sobretudo, empregador, apresentam predominância de famílias com renda acima de ½ salário mínimo. Esse padrão reforça a relevância das informações de ocupação do responsável familiar como um dos principais sinais socioeconômicos utilizados pelo modelo para identificar potenciais inconsistências entre renda declarada e renda provável.
+O tipo de trabalho principal do responsável familiar diferencia as classes de forma clara nas categorias de maior volume. Militares/servidores públicos concentram a maior proporção acima de ½ SM (66,1%), seguidos de empregados com carteira (59,6%) e domésticos com carteira (59,6%), refletindo a estabilidade e proteção social desses vínculos. No polo oposto, temporários rurais (69,7%) e trabalhadores por conta própria (64,8%) predominam na classe de menor renda, padrão consistente com a precariedade desses vínculos. O grupo -1 (RFs fora do mercado de trabalho na semana, sem afastamento), distribui-se próximo ao equilíbrio (51,7%), refletindo a heterogeneidade desse grupo, parte sustentada por transferências e benefícios, parte em vulnerabilidade efetiva.
+
+### Detalhamento - CO_TRABALHO_12_MESES_MEMB
+
+<img width="956" height="361" alt="image" src="https://github.com/user-attachments/assets/186232e1-de20-468f-ac79-f1efbd428be0" />
+
+<img width="731" height="348" alt="image" src="https://github.com/user-attachments/assets/bc99563d-38b3-47fd-91a0-26b94b061be3" />
+
+A variável que capta se o RF trabalhou nos últimos 12 meses tem baixíssimo poder discriminativo, diferença de apenas ~6 p.p. entre quem trabalhou (56,9%) e quem não trabalhou (50,9%), com ambos os grupos majoritariamente acima de ½ SM. Em volume, 80% da base trabalhou no período. O sinal fraco pode revelar uma característica estrutural do CadÚnico: trabalhar nos últimos 12 meses não garante superar a vulnerabilidade de renda. Na outra ponta, parte dos que não trabalharam recebem transferências de renda e benefícios, equilibrando as proporções entre os grupos.
+
+### Detalhamento - PCT_IDOSOS_60A64 
+
+<img width="947" height="362" alt="image" src="https://github.com/user-attachments/assets/79f58a98-721f-4c4b-855c-5b0f03348e09" />
+
+<img width="694" height="336" alt="image" src="https://github.com/user-attachments/assets/3de29df9-36f8-455d-b89d-657e353c1a5e" />
+
+Pela análise dos gráficos, a presença de idosos de 60 a 64 anos apresenta sinal expressivo e consistente com o padrão previdenciário já observado em idosos a partir de 65 anos. Famílias sem idosos nessa faixa (grande maioria da base) distribuem-se próximo ao equilíbrio com leve maioria acima de ½ SM (55,3%). Já famílias com ao menos um idoso concentram 79,9% na Classe 1, refletindo o efeito da aposentadoria como âncora de renda estável no domicílio. O efeito é ligeiramente inferior ao de idosos a partir de 65 anos (96,2% Cl.1), o que faz sentido, idosos de 60 a 64 anos estão na faixa de elegibilidade à aposentadoria por idade mas ainda abaixo do limiar do BPC, resultando em maior heterogeneidade de situações previdenciárias nesse grupo.
+
+### Detalhamento - PCT_JOVENS_19A29
+
+<img width="865" height="323" alt="image" src="https://github.com/user-attachments/assets/2b791c23-97d6-42fa-8c12-ece0695724f6" />
+
+A variável apresenta comportamento oposto ao observado para crianças e adolescentes, ou seja, à medida que a proporção de jovens de 19 a 29 anos cresce, a Classe 1 passa a dominar progressivamente, atingindo aproximadamente 62% nas famílias compostas majoritariamente por jovens nessa faixa. Famílias sem jovens nessa faixa apresentam leve maioria na Classe 0 (56%). O padrão reflete o efeito positivo da entrada no mercado de trabalho, jovens adultos tendem a contribuir com renda ao domicílio, elevando a renda per capita familiar, em contraste com crianças e adolescentes, que pressionam o denominador per capita sem contrapartida de renda. A trajetória não é linear, com alguma oscilação nos bins intermediários, sugerindo heterogeneidade de situações nessa faixa etária, ou seja, parte ainda estudando ou em situação de desemprego, parte já inserida no mercado de trabalho.
+
+### Detalhamento - CO_MUNIC_IBGE_2_FAM
+
+<img width="974" height="371" alt="image" src="https://github.com/user-attachments/assets/d30d3088-16c3-4180-9fbd-bd6b90a84f35" />
+
+<img width="1017" height="234" alt="image" src="https://github.com/user-attachments/assets/c6f2cc0a-e400-40ec-9d7e-1d97ac81ed12" />
+
+A variável captura o gradiente regional de renda de forma consistente com o padrão esperado para o CadÚnico. Em volume, SP domina, seguido de MG, BA e RJ. Juntos representam mais da metade da base analisada. O gráfico de proporção revela dois blocos distintos. Sul/Sudeste apresenta maioria acima de ½ SM: PR lidera com 64,5%, seguido de RS (62,4%), SP (59,0%) e MG (59,2%), refletindo economias mais diversificadas e mercados de trabalho mais formalizados. No polo oposto, estados do Nordeste e Norte concentram maior vulnerabilidade: CE (52,0%) e MA (56,4%) têm maioria na Classe 0, padrão consistente com as maiores taxas de pobreza e informalidade dessas regiões. BA e RJ apresentam comportamento intermediário, próximos ao equilíbrio (51,3% e 48,0% respectivamente), refletindo a heterogeneidade interna desses estados, que combinam centros urbanos com renda razoável e bolsões expressivos de vulnerabilidade. A variável confirma o gradiente Sul/Sudeste → maior renda per capita vs. Nordeste/Norte → maior vulnerabilidade, capturando desigualdades territoriais estruturais não absorvidas pelas demais variáveis do modelo.
+
+### Detalhamento - CO_MATERIAL_PISO_FAM
+
+<img width="879" height="323" alt="image" src="https://github.com/user-attachments/assets/401bcfc7-e9f9-4272-abfd-e3ee5021a741" />
+
+<img width="770" height="362" alt="image" src="https://github.com/user-attachments/assets/c13c2d1a-38f2-4094-a8f3-bfd559fa3f49" />
+
+A variável apresenta gradiente claro de qualidade habitacional associado à renda. Em volume, a base é dominada por Cerâmica/lajota/pedra e Cimento, que juntos representam 93% da base com domicílio regular. O padrão de proporções é consistente com o esperado: Cerâmica/lajota/pedra concentra 59,4% na Classe 1, o material de melhor acabamento e maior custo, associado a domicílios de maior renda. Cimento inverte o sinal com 55,1% na Classe 0, refletindo seu uso predominante em domicílios mais precários. Madeira aparelhada (56,1%) e Madeira aproveitada (52,2%) apresentam comportamentos distintos: a madeira aparelhada, de maior qualidade, associa-se a maior renda. Terra é o indicador mais extremo de precariedade habitacional, com 63,7% na Classe 0. O grupo -1 reúne famílias em situação de rua ou em domicílios improvisados/coletivos, para os quais as questões de domicílio não se aplicam, com 54,6% na Classe 1, resultado heterogêneo que reflete a diversidade de situações nesse grupo.
+
+### Detalhamento - QT_COMODOS_DOMIC_FAM
+
+<img width="900" height="348" alt="image" src="https://github.com/user-attachments/assets/9388ae00-6015-46c0-93e0-e3100c5db126" />
+
+Pela análise do gráfico, a variável apresenta relação positiva e crescente entre número de cômodos e renda per capita. Domicílios com poucos cômodos (1 a 3) têm distribuição próxima ao equilíbrio (50% em cada classe), enquanto a partir de 5 cômodos a Classe 1 passa a dominar de forma crescente e consistente, atingindo 75% nas faixas de maior número de cômodos. O padrão é esperado: mais cômodos indica domicílios maiores e de maior qualidade construtiva, associados a famílias de maior renda per capita. O volume concentra-se fortemente nas faixas de 1 a 7 cômodos, com queda expressiva a partir daí, o que exige cautela na interpretação das proporções nas faixas mais altas, apesar da tendência ser clara e monotônica.
 
 ## Análises adicionais considerando as classes de renda pobreza, baixa-renda e acima de 1/2 SM
 
@@ -486,6 +558,52 @@ Em conjunto, os resultados indicam que o modelo é bem calibrado para diferencia
 ## Comparação com o modelo usando variáveis do IVCAD
 
 Dado o extenso trabalho de engenharia das variáveis diretas do Cadastro Único, foi avaliado se o Índice de Vulnerabilidade do Cadastro Único (IVCAD) — índice multidimensional já disponível — poderia cumprir função semelhante de triagem a menor custo. Foram treinados dois modelos adicionais com o mesmo objetivo e metodologia: um apenas com as variáveis do IVCAD (IVCAD puro) e outro combinando o IVCAD às variáveis individuais do responsável familiar (IVCAD+RF). Em todos os casos foram mapeadas e removidas as variáveis do IVCAD com informação direta de renda, para evitar vazamento de informação.
+
+As variáveis do IVCAD utilizadas no modelo constam na tabela abaixo.
+
+| Variável	| Descrição |	Mapeamento |
+| ------- | ------- | -------- |
+| NC1	 | Presença de criança de 0 a 3 anos	| Utilizada |  
+| NC2	 | Presença de criança de 0 a 6 anos	| Utilizada |
+| NC3	 | Presença de criança de 0 a 12 anos	| Utilizada |
+| NC4	 | Presença de pessoa com deficiência |	Utilizada |
+| NC5	 | Presença de idoso de 60 anos ou mais	| Utilizada |
+| NC6	 | Metade ou menos dos membros está em idade adulta (18 a 59 anos)	| Utilizada |
+| NC7	 | Metade ou menos dos membros é do sexo feminino e está em idade adulta (18 a 59 anos) e que possuam membros com idade até 12 anos	| Utilizada |
+| DPI1	 | Possui criança de 4 a 6 anos que não frequenta ou nunca frequentou creche/pré	| Utilizada |
+| DPI2	 | Possui criança de 0 a 6 anos que não frequenta ou nunca frequentou creche/pré | 	Utilizada |
+| DPI3	 | Possui criança de 0 a 6 anos que não seja filho ou enteado do responsável familiar	| Utilizada |
+| DCA1	 | Possui criança ou adolescente de 7 a 15 anos trabalhando	| Utilizada |
+| DCA2	 | Possui adolescente de 15 a 17 anos fora da escola | 	Utilizada |
+| DCA3	 | Possui criança ou adolescente de 7 a 17 anos fora da escola	| Utilizada |
+| DCA4	 | Possui criança ou adolescente de 10 a 17 anos analfabeto	| Utilizada |
+| DCA5	 | Possui criança ou adolescente de 10 a 17 anos com mais de 2 anos de atraso escolar	| Utilizada |
+| TQA1	 | Presença de adulto analfabeto ou analfabeto funcional	| Utilizada |
+| TQA2	 | Presença de adulto sem ensino fundamental completo	| Utilizada |
+| TQA3	 | Presença de adulto sem ensino médio completo	| Utilizada | 
+| TQA4	 | Nenhum adulto ocupado	| Excluída | 
+| TQA5	 | Nenhum adulto ocupado no setor formal	| Utilizada |
+| TQA6	 | Nenhum adulto ocupado com rendimento do trabalho superior a 1 salário mínimo	| Não utilizada |
+| TQA7	 | Nenhum adulto ocupado com rendimento do trabalho superior a 2 salários mínimos	| Não utilizada |
+| DR1	 | Família sem renda ou benefícios socioassistenciais	| Não utilizada |
+| DR2	 | Família em situação de pobreza mesmo considerando benefícios socioassistenciais	| Não utilizada | 
+| DR3	 | Família em situação de pobreza se não considerar benefício PBF	| Não utilizada |
+| DR4	 | Família em situação de pobreza se não considerar benefícios socioassistenciais (PBF e BPC)	| Não utilizada |
+| CH1	 | Domicílio particular improvisado ou situação de rua | 	Excluída |
+| CH2	 | Densidade de mais de 3 moradores por dormitório	| Utilizada | 
+| CH3	 | Família despende mais de 30% de sua renda* com aluguel	| Não utilizada |
+| CH4	 | Família possui despesa com aluguel	| Não utilizada |
+| CH5	 | Domicílio sem parede nem piso com material permanente	| Utilizada | 
+| CH6	 | Domicílio sem parede ou piso com material permanente	Utilizada | 
+| CH7	 | Domicílio sem acesso adequado à água de rede geral de distribuição	Utilizada | 
+| CH8	 | Domicílio sem acesso adequado à água	Utilizada | 
+| CH9	 | Domicílio sem banheiro ou sanitário	Utilizada | 
+| CH10	 |  Domicílio sem esgotamento sanitário adequado	| Utilizada | 
+| CH11	 | Lixo não é coletado de forma direta	| Utilizada | 
+| CH12	 | Lixo não é coletado de forma direta ou indireta	| Utilizada | 
+| CH13	  | Domicílio sem acesso à eletricidade com medidor | 	Utilizada | 
+| CH14	 | Domicílio sem acesso à eletricidade	| Utilizada |
+
 
 O modelo com variáveis diretas do Cadastro Único superou ambas as alternativas em todas as métricas:
 
