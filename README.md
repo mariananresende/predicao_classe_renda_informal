@@ -667,7 +667,7 @@ As referências completas, em formato ABNT, encontram-se no artigo do projeto. A
 
 **Uso ético e governança de IA no setor público**
 - Brasil/MCTI (2025) — *Plano Brasileiro de Inteligência Artificial (PBIA).* [link](https://www.gov.br/mcti/pt-br/centrais-de-conteudo/publicacoes-mcti/plano-brasileiro-de-inteligencia-artificial/pbia_mcti_2025.pdf)
-- Brasil/MGI–SERPRO (2025) — *IA Generativa no Serviço Público: definições, usos e boas práticas.* [link](https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1/ia-generativa-no-servico-publico.pdf)
+- Brasil/MGI–SERPRO (2025) — *IA Generativa no Serviço Público: definições, usos e boas práticas.* [link]([https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1/publicacoes/guia-ia-generativa])
 - Denis et al. (2021) — *Uso responsável da IA para políticas públicas.* BID. [DOI](https://doi.org/10.18235/0003631)
 - Transparência Brasil (2020) — *Recomendações de governança: uso de IA pelo poder público.* [link](https://transparencia.org.br)
 - ONU (2019) — *Digital technology, social protection and human rights.* [link](https://www.ohchr.org/en/calls-for-input/digital-technology-social-protection-and-human-rights-report)
