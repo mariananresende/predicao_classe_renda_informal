@@ -649,14 +649,16 @@ O levantamento bibliográfico contou com apoio de um modelo de linguagem (Claude
 
 As referências completas, em formato ABNT, encontram-se no artigo do projeto. A seguir, as principais fontes que embasaram as escolhas metodológicas, organizadas por tema.
 
-**Machine learning para predição de pobreza e focalização**
+**Machine learning e uso de dados administrativos para predição de pobreza e focalização**
 - Linhares et al. (2026) — *A new era in poverty diagnostics.* [DOI](https://doi.org/10.1016/j.ject.2025.05.002)
-- Corral, Henderson & Segovia (2025) — *Poverty mapping in the age of machine learning.* [DOI](https://doi.org/10.1016/j.jdeveco.2024.103377)
 - Verme (2025) — *Predicting poverty.* World Bank Economic Review. [DOI](https://doi.org/10.1093/wber/lhae044)
 - Altindağ et al. (2021) — *Targeting humanitarian aid using administrative data.* [DOI](https://doi.org/10.1016/j.jdeveco.2020.102564)
 - McBride & Nichols (2016) — *Retooling poverty targeting using machine learning.* World Bank. [DOI](https://doi.org/10.1596/33525)
-- Wobcke & Mariyah (2023) — *ML and data augmentation in the proxy means test.* [DOI](https://doi.org/10.3233/SJI-230033)
 - Herrera et al. (2023) — *ICTs and income distribution in Brazil: a SHAP explanation.* [DOI](https://doi.org/10.1016/j.telpol.2023.102598)
+- Li et al. (2022) - *Is poverty predictable with machine learning?* [DOI](https://doi.org/10.1016/j.seps.2021.101195)
+- Salvador (2024) - *Use of boosting algorithms in household-level poverty measurement* [link](https://arxiv.org/abs/2407.13061)
+- Smith et al. (2022) - *Using administrative data to impute income non-response in household surveys* [link](https://www.nber.org/papers/w30420)
+- Solís-Salazar & Madrigal-Sanabria (2022) - *A machine learning proposal to predict poverty* [DOI](https://doi.org/10.18845/tm.v35i4.5766)
 
 **Cadastro Único, renda informal e contexto brasileiro**
 - Mostafa & Santos (2016) — *Limitações de um teste de meios via predição de renda.* Ipea. [link](http://repositorio.ipea.gov.br/handle/11058/7234)
@@ -664,14 +666,15 @@ As referências completas, em formato ABNT, encontram-se no artigo do projeto. A
 - Engbom et al. (2022) — *Earnings inequality and dynamics in the presence of informality: Brazil.* [DOI](https://doi.org/10.3982/QE1855)
 - Direito, Licio & Curralero (2024) — *Cadastro Único e a crise da maior idade.* Ipea TD n. 2989. [DOI](http://dx.doi.org/10.38116/td2989-port)
 - Dietrich, Malerba & Gassmann (2024) — *Predicting social assistance beneficiaries: the welfare damage of data biases.* [DOI](https://doi.org/10.1017/dap.2023.38)
+- Britto et al. (2022) - *Intergenerational Mobility in the Land of Inequality.* [link](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4241590)
+- Direito & Koga - *A rede do Cadastro Único* - [DOI](https://doi.org/10.1590/0034-761220190092)
+- Koga, Viana & Marques - *Usos e significados do Cadastro Único* [DOI](https://www.ipea.gov.br/portal/images/stories/PDFs/boletim_analise_politico/201203_bapi_24_art6.pdf)
 
 **Uso ético e governança de IA no setor público**
 - Brasil/MCTI (2025) — *Plano Brasileiro de Inteligência Artificial (PBIA).* [link](https://www.gov.br/mcti/pt-br/centrais-de-conteudo/publicacoes-mcti/plano-brasileiro-de-inteligencia-artificial/pbia_mcti_2025.pdf)
 - Brasil/MGI–SERPRO (2025) — *IA Generativa no Serviço Público: definições, usos e boas práticas.* [link]([https://www.gov.br/governodigital/pt-br/infraestrutura-nacional-de-dados/inteligencia-artificial-1/publicacoes/guia-ia-generativa])
 - Denis et al. (2021) — *Uso responsável da IA para políticas públicas.* BID. [DOI](https://doi.org/10.18235/0003631)
-- Transparência Brasil (2020) — *Recomendações de governança: uso de IA pelo poder público.* [link](https://transparencia.org.br)
-- ONU (2019) — *Digital technology, social protection and human rights.* [link](https://www.ohchr.org/en/calls-for-input/digital-technology-social-protection-and-human-rights-report)
-- Harari (2024) — *Nexus: uma breve história das redes de informação.* Companhia das Letras.
+- Internetlab (2026) - *Panorama da digitalização e datificação do CadÚnico* [link](https://internetlab.org.br/wp-content/uploads/2026/01/Relatorio-Automatizacao-da-protecao-social.pt_.pdf)
 
 **Marco normativo do Cadastro Único**
 - Brasil (2022) — Decreto nº 11.016/2022 (regulamenta o Cadastro Único). [link](https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2022/decreto/d11016.htm)
